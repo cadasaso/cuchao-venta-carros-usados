@@ -7,10 +7,9 @@ CUCHAO es una aplicación web desarrollada para la venta de carros usados. El si
 Desarrollar una aplicación web con Django y PostgreSQL que permita gestionar la venta de carros usados, diferenciando una sección para usuarios finales y una sección para administradores, con autenticación mediante login y funcionalidades que mejoren la experiencia del usuario.
 
 ## Integrantes
-- Nombre del integrante 1
-- Nombre del integrante 2
-- Nombre del integrante 3
-- Nombre del integrante 4
+- Carlos Sanchez
+- Julian Osorio Alturo 
+- Samuel Lenis Mira
 
 ## Tecnologías utilizadas
 - Python
