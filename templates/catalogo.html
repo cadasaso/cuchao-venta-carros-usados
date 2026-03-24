@@ -28,15 +28,28 @@
                     <p class="price">${{ carro.precio }}</p>
                     <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">Por: {{ carro.propietario.username }}</p>
                     
-                    {% if user.is_authenticated and carro.propietario == user %}
-                        <div style="margin-top: 1rem; display: flex; gap: 0.6rem;">
-                            <a href="{% url 'editar_carro' carro.id %}" style="flex: 1; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);">Editar</a>
-                            <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex: 1;" onsubmit="return confirm('¿Estás seguro?');">
-                                {% csrf_token %}
-                                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">Eliminar</button>
-                            </form>
+                    {% if carro.vendido %}
+                        <div style="margin-top: 0.8rem; padding: 0.6rem; background-color: #fee2e2; border-left: 4px solid #dc2626; border-radius: 4px;">
+                            <p style="margin: 0; color: #991b1b; font-weight: 600; font-size: 0.85rem;">Vendido</p>
+                        </div>
+                    {% else %}
+                        <div style="margin-top: 0.8rem; padding: 0.6rem; background-color: #dcfce7; border-left: 4px solid #16a34a; border-radius: 4px;">
+                            <p style="margin: 0; color: #166534; font-weight: 600; font-size: 0.85rem;">Disponible</p>
                         </div>
                     {% endif %}
+                    
+                    <!-- Botones de acción -->
+                    <div style="margin-top: 1rem; display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                        {% if user.is_authenticated and not carro.vendido and carro.propietario != user %}
+                            <a href="{% url 'confirmar_compra' carro.id %}" style="flex: 1; min-width: 100px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">Comprar</a>
+                        {% elif user.is_authenticated and carro.propietario == user %}
+                            <a href="{% url 'editar_carro' carro.id %}" style="flex: 1; min-width: 100px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);">Editar</a>
+                            <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex: 1; min-width: 100px;" onsubmit="return confirm('¿Estás seguro?');">
+                                {% csrf_token %}
+                                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">Eliminar</button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         {% empty %}
