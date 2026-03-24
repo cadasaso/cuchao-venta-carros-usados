@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Compra - Cuchao{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto; padding: 2rem; background-color: #f8fafc; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    
+    <h1 style="color: #0f172a; text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">Confirmar Compra</h1>
+    
+    <div style="background-color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid #e2e8f0;">
+        
+        <h2 style="color: #1e293b; margin-top: 0; margin-bottom: 1rem; font-size: 1.2rem;">Detalle del Producto</h2>
+        
+        {% if carro.imagen %}
+            <div style="margin-bottom: 1.5rem;">
+                <img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        {% else %}
+            <div style="width: 100%; height: 250px; background-color: #e0e7ff; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border-radius: 8px;">
+                <span style="color: #1e3a8a; font-size: 1.1rem;">Sin imagen disponible</span>
+            </div>
+        {% endif %}
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem;">Modelo:</label>
+            <p style="color: #0f172a; margin: 0; font-size: 1.1rem; font-weight: 500;">{{ carro.modelo }}</p>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem;">Descripción:</label>
+            <p style="color: #475569; margin: 0;">{{ carro.descripcion }}</p>
+        </div>
+        
+        <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+            <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem;">Precio:</label>
+            <p style="color: #10b981; margin: 0; font-size: 1.5rem; font-weight: bold;">${{ carro.precio }}</p>
+        </div>
+        
+        <div>
+            <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem;">Vendedor:</label>
+            <p style="color: #0f172a; margin: 0;">{{ carro.propietario.username }}</p>
+        </div>
+        
+    </div>
+    
+    <form method="POST" action="{% url 'procesar_compra' carro.id %}" style="background-color: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+        {% csrf_token %}
+        
+        <h2 style="color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; font-size: 1.2rem;">Método de Pago</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for valor, etiqueta in metodos_pago %}
+                <label style="display: flex; align-items: center; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 6px; cursor: pointer;">
+                    <input type="radio" name="metodo_pago" value="{{ valor }}" style="margin-right: 1rem; cursor: pointer;" {% if valor == 'efectivo' %}checked{% endif %}>
+                    <span style="color: #0f172a; font-weight: 600;">{{ etiqueta }}</span>
+                </label>
+            {% endfor %}
+        </div>
+        
+        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+            <p style="margin: 0; color: #92400e; font-size: 0.9rem;">
+                <strong>Importante:</strong> This is a simulated purchase. No payment will be charged to your account.
+            </p>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <a href="{% url 'catalogo' %}" style="flex: 1; background-color: #e2e8f0; color: #0f172a; padding: 12px 20px; border-radius: 6px; text-align: center; text-decoration: none; font-weight: 600; cursor: pointer;">Cancelar</a>
+            <button type="submit" style="flex: 1; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);">Realizar Compra</button>
+        </div>
+        
+    </form>
+    
+</div>
+{% endblock %}
