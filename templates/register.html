@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrarse - Cuchao{% endblock %}
+
+{% block content %}
+<form method="post" novalidate>
+    <h1>Crear Cuenta</h1>
+    
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class="error-box">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div>
+        <label for="id_username" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Usuario</label>
+        <input type="text" id="id_username" name="username" placeholder="Elige un nombre de usuario" value="{{ form.username.value|default:'' }}" required>
+        {% if form.username.errors %}
+            <div class="field-error">
+                {% for error in form.username.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_email" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Email</label>
+        <input type="email" id="id_email" name="email" placeholder="tu@email.com" value="{{ form.email.value|default:'' }}" required>
+        {% if form.email.errors %}
+            <div class="field-error">
+                {% for error in form.email.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_password1" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Contraseña</label>
+        <input type="password" id="id_password1" name="password1" placeholder="Mínimo 8 caracteres" required>
+        {% if form.password1.errors %}
+            <div class="field-error">
+                {% for error in form.password1.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_password2" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Confirmar Contraseña</label>
+        <input type="password" id="id_password2" name="password2" placeholder="Repite tu contraseña" required>
+        {% if form.password2.errors %}
+            <div class="field-error">
+                {% for error in form.password2.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <button type="submit">Registrarse Ahora</button>
+    
+    <p>
+        ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a>
+    </p>
+</form>
+{% endblock %}

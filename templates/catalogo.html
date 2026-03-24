@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo - Cuchao{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1 style="color: #0f172a; text-align: center; margin-bottom: 2rem; font-size: 2rem;">Catálogo de Carros</h1>
+    
+    {% if user.is_authenticated %}
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <a href="{% url 'agregar_carro' %}" style="background-color: #3b82f6; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;">+ Agregar Carro</a>
+        </div>
+    {% endif %}
+    
+    <div class="catalog-grid">
+        {% for carro in carros %}
+            <div class="catalog-card">
+                {% if carro.imagen %}
+                    <img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}">
+                {% else %}
+                    <div style="width: 100%; height: 200px; background-color: #e0e7ff; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: #1e3a8a;">Sin imagen</span>
+                    </div>
+                {% endif %}
+                <div class="card-content">
+                    <h3>{{ carro.modelo }}</h3>
+                    <p>{{ carro.descripcion|truncatewords:15 }}</p>
+                    <p class="price">${{ carro.precio }}</p>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">Por: {{ carro.propietario.username }}</p>
+                    
+                    {% if user.is_authenticated and carro.propietario == user %}
+                        <div style="margin-top: 1rem; display: flex; gap: 0.6rem;">
+                            <a href="{% url 'editar_carro' carro.id %}" style="flex: 1; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);">Editar</a>
+                            <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex: 1;" onsubmit="return confirm('¿Estás seguro?');">
+                                {% csrf_token %}
+                                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">Eliminar</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p style="grid-column: 1/-1; text-align: center; color: #1e3a8a; font-size: 1.1rem;">No hay carros disponibles</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
