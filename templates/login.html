@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Cuchao{% endblock %}
+
+{% block content %}
+<form method="post" novalidate>
+    <h1>Inicia Sesión</h1>
+    
+    {% csrf_token %}
+    
+    {% if error %}
+        <div class="error-box">
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+    
+    <div>
+        <label for="id_username" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Usuario</label>
+        <input type="text" id="id_username" name="username" placeholder="Ingresa tu usuario" required>
+    </div>
+    
+    <div>
+        <label for="id_password" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Contraseña</label>
+        <input type="password" id="id_password" name="password" placeholder="Ingresa tu contraseña" required>
+    </div>
+    
+    <button type="submit">Entrar</button>
+    
+    <p>
+        ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>
+    </p>
+</form>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Carro - Cuchao{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <h1>Editar Carro</h1>
+    
+    {% csrf_token %}
+    
+    <div>
+        <label for="id_modelo" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Modelo</label>
+        <input type="text" id="id_modelo" name="modelo" placeholder="Ej: Honda Civic 2020" value="{{ form.modelo.value|default:'' }}" required>
+        {% if form.modelo.errors %}
+            <div class="field-error">
+                {% for error in form.modelo.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_descripcion" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Descripción</label>
+        <textarea id="id_descripcion" name="descripcion" placeholder="Describe tu carro..." rows="4">{{ form.descripcion.value|default:'' }}</textarea>
+        {% if form.descripcion.errors %}
+            <div class="field-error">
+                {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_precio" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Precio ($)</label>
+        <input type="number" id="id_precio" name="precio" placeholder="Ej: 50000" step="0.01" value="{{ form.precio.value|default:'' }}" required>
+        {% if form.precio.errors %}
+            <div class="field-error">
+                {% for error in form.precio.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_imagen" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Imagen</label>
+        {% if carro.imagen %}
+            <div style="margin-bottom: 1rem;">
+                <img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}" style="max-width: 200px; border-radius: 8px;">
+            </div>
+        {% endif %}
+        <input type="file" id="id_imagen" name="imagen" accept="image/*">
+        {% if form.imagen.errors %}
+            <div class="field-error">
+                {% for error in form.imagen.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <button type="submit">Guardar Cambios</button>
+    <a href="{% url 'catalogo' %}" style="display: inline-block; margin-top: 1rem; color: #3b82f6; text-decoration: none; font-weight: bold;">← Volver al catálogo</a>
+</form>
+{% endblock %}

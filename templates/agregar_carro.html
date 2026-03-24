@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Agregar Carro{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <h1>Agregar Carro</h1>
+    {% csrf_token %}
+    
+    <div>
+        <label for="id_modelo" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Modelo</label>
+        <input type="text" id="id_modelo" name="modelo" placeholder="Ej: Honda Civic 2020" required>
+        {% if form.modelo.errors %}
+            <div class="field-error">{% for error in form.modelo.errors %}{{ error }}{% endfor %}</div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_descripcion" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Descripción</label>
+        <textarea id="id_descripcion" name="descripcion" placeholder="Describe tu carro..." rows="4"></textarea>
+        {% if form.descripcion.errors %}
+            <div class="field-error">{% for error in form.descripcion.errors %}{{ error }}{% endfor %}</div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_precio" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Precio ($)</label>
+        <input type="number" id="id_precio" name="precio" placeholder="Ej: 50000" step="0.01" required>
+        {% if form.precio.errors %}
+            <div class="field-error">{% for error in form.precio.errors %}{{ error }}{% endfor %}</div>
+        {% endif %}
+    </div>
+    
+    <div>
+        <label for="id_imagen" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">📷 Imagen del Carro</label>
+        <input type="file" id="id_imagen" name="imagen" accept="image/*" required>
+        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">Sube una foto clara de tu carro</p>
+        {% if form.imagen.errors %}
+            <div class="field-error">{% for error in form.imagen.errors %}{{ error }}{% endfor %}</div>
+        {% endif %}
+    </div>
+    
+    <button type="submit">Publicar Carro</button>
+</form>
+{% endblock %}
