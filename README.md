@@ -1,368 +1,323 @@
-# Cuchao - Gestión de Carros
+# CUCHAO - Plataforma de compra y venta de carros usados
 
 <div align="center">
 
-**Plataforma web moderna para la gestión de catálogo de vehículos**
+Aplicación web desarrollada con **Django**, **PostgreSQL** y **Docker** para la gestión de un catálogo de carros usados, con autenticación de usuarios, administración de publicaciones y compra simulada.
 
-[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
-[![Django 5.2](https://img.shields.io/badge/Django-5.2-darkgreen.svg)](https://www.djangoproject.com/)
-[![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Django](https://img.shields.io/badge/Django-5.2-darkgreen)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED)
 
 </div>
 
 ---
 
-## Tabla de Contenidos
+## Descripción del proyecto
 
-- [Características](#características)
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación y Ejecución](#instalación-y-ejecución)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Comandos Útiles](#comandos-útiles)
-- [Solución de Problemas](#solución-de-problemas)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Licencia](#licencia)
+**CUCHAO** es una aplicación web orientada a la compra y venta de carros usados. El sistema permite que los usuarios se registren, inicien sesión, publiquen vehículos, editen o eliminen sus publicaciones y realicen compras simuladas de carros disponibles.
+
+El proyecto fue desarrollado siguiendo la arquitectura **MVT (Model - View - Template)** de Django, utilizando **PostgreSQL** como motor de base de datos y **Docker** para facilitar su ejecución.
 
 ---
 
-## Características
+## Objetivo
 
-- Autenticación y registro de usuarios
-- Catálogo de vehículos con búsqueda
-- Gestión completa de carros (crear, editar, eliminar)
-- Carga y visualización de imágenes
-- Panel de administración de Django
-- Base de datos PostgreSQL
-- Dockerizado para fácil despliegue
-- Interfaz responsiva
+Construir una plataforma web que separe claramente la experiencia del **usuario final** y la del **administrador**, permitiendo la gestión de vehículos usados y simulando el flujo de compra dentro del sistema.
 
 ---
 
-## Requisitos Previos
+## Funcionalidades implementadas
 
-### Opción 1: Con Docker (Recomendado)
-- Docker Engine
-- Docker Compose
+### Funcionalidades principales
+- Registro de usuarios
+- Inicio y cierre de sesión
+- Catálogo público de carros
+- Publicación de carros por usuarios autenticados
+- Edición de carros por su propietario
+- Eliminación de carros por su propietario
+- Visualización del estado del vehículo: disponible o vendido
+- Panel de administración con Django Admin
 
-### Opción 2: Sin Docker
-- Python 3.12+
-- PostgreSQL 15+
-- pip (gestor de paquetes de Python)
+### Funcionalidades interesantes implementadas
+- **Compra simulada de carros** con selección de método de pago
+- **Registro de compras** en base de datos mediante el modelo `Compra`
+- **Marcado automático de carros vendidos** después de una compra exitosa
+- **Control de permisos** para que solo el propietario pueda editar o eliminar sus publicaciones
+
+> Nota: en el código actual sí está implementado el flujo de compra simulada. No se encontró una funcionalidad de búsqueda activa en las vistas o rutas actuales, por lo que no se incluye como funcionalidad terminada.
 
 ---
 
-## Inicio Rápido
+## Arquitectura del proyecto
 
-La forma más fácil de empezar es con Docker:
+El proyecto sigue la arquitectura **MVT**:
+
+- **Modelos:** definen la estructura de datos del sistema
+- **Vistas:** procesan la lógica de negocio
+- **Templates:** renderizan la interfaz HTML al usuario
+
+### Modelos principales
+- **Usuario**: modelo personalizado basado en `AbstractUser`
+- **Carro**: almacena la información del vehículo publicado
+- **Compra**: guarda el historial de compras simuladas
+
+### Secciones del sistema
+- **Sección usuario final:** catálogo, registro, login, publicación y compra
+- **Sección administrador:** gestión desde `/admin/`
+
+---
+
+## Tecnologías utilizadas
+
+- **Python 3.12**
+- **Django 5.2.4**
+- **PostgreSQL 16**
+- **Docker / Docker Compose**
+- **Pillow**
+- **HTML5 / CSS3**
+
+---
+
+## Estructura del proyecto
+
+```text
+cuchao-venta-carros-usados-main/
+├── carros/                     # App principal
+│   ├── migrations/             # Migraciones de base de datos
+│   ├── admin.py                # Configuración de panel admin
+│   ├── forms.py                # Formularios del sistema
+│   ├── models.py               # Modelos Usuario, Carro y Compra
+│   ├── urls.py                 # Rutas de la app
+│   └── views.py                # Lógica principal
+├── cuchao/                     # Configuración del proyecto Django
+├── templates/                  # Interfaces HTML
+├── media/                      # Imágenes subidas por usuarios
+├── docs/                       # Documentación técnica adicional
+├── wiki/                       # Contenido base para la Wiki de GitHub
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── manage.py
+└── README.md
+```
+
+---
+
+## Rutas principales
+
+- **Ruta principal del sistema:** `http://localhost:8000/`
+- **Panel de administración:** `http://localhost:8000/admin/`
+- **Registro:** `http://localhost:8000/register/`
+- **Login:** `http://localhost:8000/login/`
+
+---
+
+## Requisitos previos
+
+Para ejecutar el proyecto necesitas tener instalado:
+
+- **Docker** y **Docker Compose**
+
+Si deseas correrlo sin Docker, necesitas además:
+- **Python 3.12**
+- **PostgreSQL**
+- **pip**
+- un entorno virtual recomendado
+
+---
+
+## Ejecución del proyecto
+
+### Opción recomendada: con Docker
+
+1. Clona el repositorio:
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/cuchao.git
-cd cuchao
+git clone https://github.com/cadasaso/cuchao-venta-carros-usados.git
+cd cuchao-venta-carros-usados
+```
 
-# Iniciar con Docker
-docker compose up
+2. Levanta los contenedores:
 
-# En otra terminal, ejecutar migraciones
-docker compose exec web python manage.py migrate
+```bash
+docker compose up --build
+```
+
+3. El proyecto aplicará migraciones al iniciar el contenedor web. Si deseas crear un usuario administrador:
+
+```bash
 docker compose exec web python manage.py createsuperuser
+```
 
-# Acceder a la aplicación
-# - Web: http://localhost:8000
-# - Admin: http://localhost:8000/admin
+4. Accede al sistema desde:
+
+```text
+http://localhost:8000/
 ```
 
 ---
 
-## Instalación y Ejecución
+### Opción local sin Docker
 
-### Opción 1: Con Docker Compose (Recomendado)
-
-**Requisitos:** Docker Engine y Docker Compose instalados
-
-1. **Inicia los servicios:**
-   ```bash
-   docker compose up
-   ```
-   
-   Se crearán automáticamente:
-   - Contenedor PostgreSQL en puerto 5432
-   - Servidor Django en puerto 8000
-
-2. **En otra terminal, ejecuta migraciones:**
-   ```bash
-   docker compose exec web python manage.py migrate
-   ```
-
-3. **Crea tu superusuario (administrador):**
-   ```bash
-   docker compose exec web python manage.py createsuperuser
-   ```
-
-4. **Accede a tu aplicación:**
-   - Sitio web: http://localhost:8000
-   - Panel admin: http://localhost:8000/admin
-
-5. **Detener los servicios:**
-   ```bash
-   docker compose down
-   ```
-   
-   Los datos se preservan automáticamente. Para limpiar completamente:
-   ```bash
-   docker compose down -v
-   ```
-
----
-
-### Opción 2: Sin Docker (Desarrollo Local)
-
-**Requisitos:** Python 3.12+, PostgreSQL 16 instalados localmente
-
-1. **Clona el repositorio:**
-   ```bash
-   git clone https://github.com/tu-usuario/cuchao.git
-   cd cuchao
-   ```
-
-2. **Crea un entorno virtual:**
-   ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-
-   # macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-3. **Instala las dependencias:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configura PostgreSQL:**
-   
-   Asegúrate que PostgreSQL esté corriendo. Por defecto la app espera:
-   - **Host:** localhost
-   - **Usuario:** cuchao_user
-   - **Contraseña:** Cuchao123
-   - **Base de datos:** cuchao_db
-   
-   O modifica `cuchao/settings.py` en la sección `DATABASES`.
-
-5. **Ejecuta las migraciones:**
-   ```bash
-   python manage.py migrate
-   ```
-
-6. **Crea tu superusuario:**
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-7. **Inicia el servidor:**
-   ```bash
-   python manage.py runserver
-   ```
-
-8. **Accede en tu navegador:**
-   - Sitio web: http://localhost:8000
-   - Panel admin: http://localhost:8000/admin
-
----
-
-## Estructura del Proyecto
-
-```
-cuchao/
-├── carros/                    # Aplicación principal de Django
-│   ├── migrations/           # Migraciones de base de datos
-│   ├── static/               # Archivos CSS
-│   ├── models.py            # Modelos de datos (Usuario, Carro)
-│   ├── views.py             # Vistas de la aplicación
-│   ├── forms.py             # Formularios (UsuarioCreationForm, CarroForm)
-│   ├── urls.py              # Rutas de carros
-│   └── admin.py             # Configuración del panel admin
-│
-├── cuchao/                   # Configuración del proyecto Django
-│   ├── settings.py          # Configuraciones principales
-│   ├── urls.py              # Rutas principales
-│   ├── wsgi.py              # WSGI para producción
-│   └── asgi.py              # ASGI para producción
-│
-├── templates/                # Archivos HTML
-│   ├── base.html            # Template base
-│   ├── agregar_carro.html
-│   ├── editar_carro.html
-│   ├── catalogo.html
-│   ├── login.html
-│   └── register.html
-│
-├── static/                    # Archivos estáticos globales
-├── media/                     # Archivos de medios subidos por usuarios
-│
-├── Dockerfile               # Configuración para Docker
-├── docker-compose.yml       # Orquestación de servicios (PostgreSQL + Django)
-├── manage.py                # Herramienta de gestión de Django
-├── requirements.txt         # Dependencias de Python
-└── README.md               # Este archivo
-```
-
----
-
-## Comandos Útiles
-
-### Con Docker Compose
+1. Crea y activa un entorno virtual:
 
 ```bash
-# Iniciar servicios
-docker compose up
-
-# Iniciar en background
-docker compose up -d
-
-# Detener sin eliminar datos
-docker compose down
-
-# Ver logs en tiempo real
-docker compose logs -f web
-
-# Ejecutar comando en contenedor web
-docker compose exec web python manage.py <comando>
-
-# Crear migraciones
-docker compose exec web python manage.py makemigrations
-
-# Aplicar migraciones
-docker compose exec web python manage.py migrate
-
-# Shell interactivo de Django
-docker compose exec web python manage.py shell
-
-# Acceder a PostgreSQL
-docker compose exec db psql -U cuchao_user -d cuchao_db
+python -m venv venv
+source venv/bin/activate
 ```
 
-### Sin Docker (Local)
+En Windows:
 
 ```bash
-# Crear migraciones
-python manage.py makemigrations
+venv\Scripts\activate
+```
 
-# Aplicar migraciones
+2. Instala las dependencias:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Configura PostgreSQL y las variables de entorno necesarias.
+
+Ejemplo:
+
+```bash
+export DB_NAME=cuchao_db
+export DB_USER=cuchao_user
+export DB_PASSWORD=Cuchao123
+export DB_HOST=localhost
+export DB_PORT=5432
+```
+
+4. Ejecuta migraciones:
+
+```bash
 python manage.py migrate
+```
 
-# Runserver
-python manage.py runserver
+5. Crea un superusuario:
 
-# Shell interactivo
-python manage.py shell
-
-# Crear superusuario
+```bash
 python manage.py createsuperuser
-
-# Recolectar archivos estáticos
-python manage.py collectstatic
-
-# Ejecutar tests
-python manage.py test
 ```
 
----
-
-## Configuración Predeterminada (Docker)
-
-**Base de datos PostgreSQL:**
-```
-Usuario: cuchao_user
-Contraseña: Cuchao123
-Base de datos: cuchao_db
-Puerto: 5432
-```
-
-**Importante:** Cambia estas credenciales en producción. Ver `cuchao/settings.py` para variables de entorno.
-
-## Solución de Problemas
-
-### Puerto 8000 ya está en uso
-
-**Solution:** Cambia el puerto en docker-compose.yml o usa:
+6. Inicia el servidor:
 
 ```bash
-docker compose up -p 8001:8000
+python manage.py runserver
 ```
 
-Luego accede a http://localhost:8001
+---
 
-### Errores de conexión a la base de datos
+## Variables de entorno
 
-```bash
-# Verifica el estatus de los contenedores
-docker compose ps
+El proyecto incluye un archivo `.env.example` con la configuración base:
 
-# Reinicia los servicios
-docker compose restart
-
-# Ver logs detallados
-docker compose logs -f web
-docker compose logs -f db
+```env
+DEBUG=1
+SECRET_KEY=change-me-in-production
+DB_NAME=cuchao_db
+DB_USER=cuchao_user
+DB_PASSWORD=Cuchao123
+DB_HOST=db
+DB_PORT=5432
 ```
 
-### Las migraciones no se aplican
-
-```bash
-# Manualmente
-docker compose exec web python manage.py migrate
-
-# En desarrollo local
-python manage.py migrate
-```
-
-### Error: "base de datos cuchao_user no existe"
-
-Este error ocurre cuando PostgreSQL intenta conectarse sin especificar la BD.
-
-**Solución:** Verifica el `docker-compose.yml` y que `DB_NAME=cuchao_db` esté configurado.
+Para ejecución local sin Docker, normalmente `DB_HOST` debe cambiarse a `localhost`.
 
 ---
 
-## Tecnologías Utilizadas
+## Flujo general del sistema
 
-- **Django 5.2.4** - Framework web Python
-- **PostgreSQL 16** - Base de datos relacional
-- **Python 3.12** - Lenguaje de programación
-- **Docker & Docker Compose** - Contenedorización
-- **Pillow** - Procesamiento de imágenes
-- **HTML5 & CSS3** - Frontend
-
----
-
-## Contribuir
-
-Las contribuciones son bienvenidas. Para cambios importantes:
-
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. El usuario se registra o inicia sesión.
+2. Puede publicar un carro con modelo, descripción, imagen y precio.
+3. El catálogo muestra todos los carros disponibles o vendidos.
+4. Si el carro pertenece al usuario, este puede editarlo o eliminarlo.
+5. Si el carro pertenece a otro usuario y está disponible, puede comprarlo.
+6. El sistema registra la compra y marca el carro como vendido.
+7. El administrador puede gestionar usuarios, carros y compras desde Django Admin.
 
 ---
 
-## Autor
+## Modelos del sistema
 
-**Cuchao Team**
+### `Usuario`
+Modelo personalizado basado en `AbstractUser`.
+
+### `Carro`
+Campos principales:
+- `propietario`
+- `modelo`
+- `descripcion`
+- `imagen`
+- `precio`
+- `vendido`
+
+### `Compra`
+Campos principales:
+- `comprador`
+- `carro`
+- `metodo_pago`
+- `precio_pagado`
+- `fecha_compra`
 
 ---
 
-## Soporte
+## Archivos importantes del proyecto
 
-Si encuentras algún problema o tienes preguntas, abre un issue en el repositorio.
+- `carros/models.py`: definición de modelos
+- `carros/views.py`: lógica de registro, login, catálogo, CRUD y compra
+- `carros/forms.py`: formularios de usuario y carro
+- `carros/admin.py`: configuración del panel de administración
+- `templates/`: vistas HTML del sistema
+- `docker-compose.yml`: configuración de contenedores
+- `COMPRAS.md`: documentación específica del flujo de compra simulada
+
+---
+
+## Estado actual del proyecto
+
+Actualmente el proyecto incluye:
+- autenticación de usuarios
+- catálogo funcional
+- CRUD de carros
+- compra simulada
+- registro de compras
+- soporte con Docker y PostgreSQL
+- migraciones de base de datos
+- documentación base para fortalecer el repositorio
+
+### Mejoras futuras recomendadas
+- agregar pantallazos del sistema al repositorio
+- incluir pruebas automatizadas
+- exportar y documentar datos ficticios en SQL si el docente lo solicita
+- completar la Wiki pública en GitHub
+- crear issues, project board y releases para fortalecer la gestión del repositorio
+- desplegar la aplicación en la nube
+
+---
+
+## Integrantes
+- Carlos Sanchez
+- Julian Osorio Alturo 
+- Samuel Lenis Mira
+
+> Reemplaza esta sección con los nombres reales del equipo.
 
 ---
 
 ## Licencia
 
-Este proyecto está bajo licencia MIT. Ver archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto se distribuye bajo la licencia **MIT**.
+
+---
+
+## Repositorio
+
+Repositorio del proyecto:
+
+```text
+https://github.com/cadasaso/cuchao-venta-carros-usados.git
+```
