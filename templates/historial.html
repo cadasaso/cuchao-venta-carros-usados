@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Historial - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="section-title">Historial de visitas</h1>
+    <p class="section-subtitle">Carros que has visto recientemente</p>
+
+    <div class="catalog-grid">
+        {% for h in items %}
+        <div class="car-card">
+            <a href="{% url 'detalle_carro' h.carro.id %}" class="car-img">
+                {% if h.carro.imagen %}<img src="{{ h.carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}
+            </a>
+            <div class="car-body">
+                <h3>{{ h.carro.marca }} {{ h.carro.modelo }}</h3>
+                <div class="car-price">${{ h.carro.precio|floatformat:0 }}</div>
+                <small style="color:var(--muted);">Visto {{ h.fecha|timesince }} atrás</small>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon"></div>
+            <h3>Aún no has visto ningún carro</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

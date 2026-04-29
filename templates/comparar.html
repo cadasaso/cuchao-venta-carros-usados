@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Comparar carros - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="section-title">Comparador de carros</h1>
+    <p class="section-subtitle">Encuentra las diferencias clave entre tus opciones favoritas</p>
+
+    {% if carros|length < 2 %}
+    <div class="empty-state">
+        <div class="icon"></div>
+        <h3>Selecciona al menos 2 carros para comparar</h3>
+        <p>Vuelve al catálogo y haz clic en el botón "Comp" en las tarjetas.</p>
+        <a href="{% url 'catalogo' %}" class="btn btn-primary mt-2" style="display:inline-block; padding:0.8rem 1.5rem;">Ir al catálogo</a>
+    </div>
+    {% else %}
+    <div class="compare-grid" style="grid-template-columns: 180px repeat({{ carros|length }}, 1fr);">
+        <div class="row-label">Imagen</div>
+        {% for c in carros %}
+        <div class="cell">
+            <a href="{% url 'detalle_carro' c.id %}" class="head-img">
+                {% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-soft);">Sin imagen</div>{% endif %}
+            </a>
+        </div>
+        {% endfor %}
+
+        <div class="row-label">Modelo</div>
+        {% for c in carros %}<div class="cell"><strong>{{ c.marca }} {{ c.modelo }}</strong></div>{% endfor %}
+
+        <div class="row-label">Precio</div>
+        {% for c in carros %}<div class="cell" style="color:var(--primary); font-size:1.2rem; font-weight:900;">${{ c.precio|floatformat:0 }}</div>{% endfor %}
+
+        <div class="row-label">Año</div>
+        {% for c in carros %}<div class="cell">{{ c.anio|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Kilometraje</div>
+        {% for c in carros %}<div class="cell">{% if c.kilometraje %}{{ c.kilometraje }} km{% else %}—{% endif %}</div>{% endfor %}
+
+        <div class="row-label">Transmisión</div>
+        {% for c in carros %}<div class="cell">{{ c.get_transmision_display|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Combustible</div>
+        {% for c in carros %}<div class="cell">{{ c.get_combustible_display|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Categoría</div>
+        {% for c in carros %}<div class="cell">{{ c.get_categoria_display|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Color</div>
+        {% for c in carros %}<div class="cell">{{ c.color|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Estado</div>
+        {% for c in carros %}<div class="cell">{{ c.get_estado_display|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Ubicación</div>
+        {% for c in carros %}<div class="cell">{{ c.ciudad|default:"—" }}</div>{% endfor %}
+
+        <div class="row-label">Vendedor</div>
+        {% for c in carros %}<div class="cell">
+            {% if c.propietario %}
+                {{ c.propietario.username }}{% if c.propietario.verificado %} (Verificado){% endif %}<br>
+                <small style="color:var(--text-soft);">{{ c.propietario.calificacion_promedio }}/5</small>
+            {% else %}—{% endif %}
+        </div>{% endfor %}
+
+        <div class="row-label">Vistas</div>
+        {% for c in carros %}<div class="cell">{{ c.vistas }} vistas</div>{% endfor %}
+
+        <div class="row-label">Acción</div>
+        {% for c in carros %}<div class="cell">
+            <a href="{% url 'detalle_carro' c.id %}" class="btn btn-primary" style="display:block;">Ver detalle</a>
+        </div>{% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

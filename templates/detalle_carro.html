@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}{{ carro.marca }} {{ carro.modelo }} - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="detail-grid">
+        <div>
+            <div class="detail-image">
+                {% if carro.imagen %}
+                <img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}">
+                {% else %}
+                <div class="car-img-placeholder" style="height:100%;"></div>
+                {% endif %}
+            </div>
+
+            <div class="form-card mt-3" style="max-width:none; margin:1.5rem 0 0;">
+                <h2 style="font-size:1.2rem; margin-bottom:1rem;">Descripción</h2>
+                <p style="color:var(--text-soft); line-height:1.7;">{{ carro.descripcion|default:"Sin descripción." }}</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="detail-info">
+                {% if carro.vendido %}<span class="badge-vendido" style="position:static; display:inline-block; margin-bottom:0.6rem;">Vendido</span>
+                {% else %}<span class="badge-disponible" style="position:static; display:inline-block; margin-bottom:0.6rem;">Disponible</span>{% endif %}
+                <h1>{{ carro.marca }} {{ carro.modelo }}</h1>
+                <p style="color:var(--text-soft);">{{ carro.ciudad|default:"Ubicación no especificada" }} · {{ carro.vistas }} vistas</p>
+                <div class="price-big">${{ carro.precio|floatformat:0 }}</div>
+
+                <div class="specs-grid">
+                    {% if carro.anio %}<div class="spec"><div class="label">Año</div><div class="value">{{ carro.anio }}</div></div>{% endif %}
+                    {% if carro.kilometraje %}<div class="spec"><div class="label">Kilometraje</div><div class="value">{{ carro.kilometraje }} km</div></div>{% endif %}
+                    {% if carro.transmision %}<div class="spec"><div class="label">Transmisión</div><div class="value">{{ carro.get_transmision_display }}</div></div>{% endif %}
+                    {% if carro.combustible %}<div class="spec"><div class="label">Combustible</div><div class="value">{{ carro.get_combustible_display }}</div></div>{% endif %}
+                    {% if carro.color %}<div class="spec"><div class="label">Color</div><div class="value">{{ carro.color }}</div></div>{% endif %}
+                    {% if carro.categoria %}<div class="spec"><div class="label">Categoría</div><div class="value">{{ carro.get_categoria_display }}</div></div>{% endif %}
+                    {% if carro.estado %}<div class="spec"><div class="label">Estado</div><div class="value">{{ carro.get_estado_display }}</div></div>{% endif %}
+                </div>
+
+                {% if carro.etiquetas.all %}
+                <div class="car-tags" style="margin:0.6rem 0 1rem;">
+                    {% for t in carro.etiquetas.all %}<span class="tag-chip solid">{{ t.nombre }}</span>{% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="flex" style="margin-top:1rem;">
+                    {% if user.is_authenticated and not carro.vendido and carro.propietario != user %}
+                        <a href="{% url 'confirmar_compra' carro.id %}" class="btn btn-success" style="padding:0.95rem; flex:2;">Comprar ahora</a>
+                        <form method="post" action="{% url 'toggle_favorito' carro.id %}" style="flex:1;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-ghost" style="padding:0.95rem; width:100%;" title="{% if es_favorito %}Quitar de favoritos{% else %}Guardar{% endif %}">{% if es_favorito %}♥ Guardado{% else %}♡ Guardar{% endif %}</button>
+                        </form>
+                    {% elif user.is_authenticated and carro.propietario == user %}
+                        <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary" style="padding:0.95rem; flex:1;">Editar</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary" style="padding:0.95rem; flex:1;">Inicia sesión para comprar</a>
+                    {% endif %}
+                </div>
+
+                {# === CALCULADORA DE FINANCIAMIENTO === #}
+                <div class="calc-card">
+                    <h3>Simulador de financiamiento</h3>
+                    <div class="calc-row">
+                        <div>
+                            <label>Cuota inicial ($)</label>
+                            <input type="number" id="calc-down" value="{{ carro.precio|floatformat:0 }}" oninput="calcular()">
+                        </div>
+                        <div>
+                            <label>Plazo (meses)</label>
+                            <select id="calc-meses" onchange="calcular()">
+                                <option value="12">12 meses</option>
+                                <option value="24">24 meses</option>
+                                <option value="36" selected>36 meses</option>
+                                <option value="48">48 meses</option>
+                                <option value="60">60 meses</option>
+                                <option value="72">72 meses</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calc-row">
+                        <div>
+                            <label>Tasa anual (%)</label>
+                            <input type="number" id="calc-tasa" value="14" step="0.1" oninput="calcular()">
+                        </div>
+                        <div style="display:flex; align-items:end;">
+                            <button type="button" class="btn btn-primary" style="width:100%;" onclick="document.getElementById('calc-down').value=Math.round({{ carro.precio }}*0.3); calcular();">30% inicial</button>
+                        </div>
+                    </div>
+                    <div class="calc-result">
+                        <div class="qty" id="calc-cuota">$0</div>
+                        <div class="lbl">cuota mensual estimada</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card mt-3" style="max-width:none; margin-top:1.5rem;">
+                <div class="flex" style="margin-bottom:1rem;">
+                    <div class="avatar">{% if carro.propietario.avatar %}<img src="{{ carro.propietario.avatar.url }}">{% else %}{{ carro.propietario.username|first|upper }}{% endif %}</div>
+                    <div>
+                        <strong style="display:block;">
+                            {{ carro.propietario.username }}
+                            {% if carro.propietario.verificado %}<span class="badge-verified">Verificado</span>{% endif %}
+                        </strong>
+                        <small style="color:var(--text-soft);">{{ carro.propietario.calificacion_promedio }}/5 · {{ carro.propietario.total_ventas }} ventas</small>
+                        {% with nivel=carro.propietario.nivel_vendedor %}
+                        <span class="badge-level">{{ nivel.1 }} {{ nivel.0 }}</span>
+                        {% endwith %}
+                    </div>
+                </div>
+                <a href="{% url 'perfil_publico' carro.propietario.username %}" class="btn btn-ghost" style="width:100%;">Ver perfil del vendedor</a>
+
+                {% if user.is_authenticated and carro.propietario != user %}
+                <form method="post" action="{% url 'enviar_mensaje' carro.id %}" style="margin-top:1rem;">
+                    {% csrf_token %}
+                    <label style="font-size:0.78rem; font-weight:700; color:var(--text-soft); text-transform:uppercase;">Mensaje al vendedor</label>
+                    <textarea name="contenido" rows="3" required style="width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; margin:0.4rem 0;"></textarea>
+                    <button type="submit" class="btn btn-primary" style="width:100%;">Enviar mensaje</button>
+                </form>
+                {% endif %}
+            </div>
+
+            {# === FORMULARIO DE OFERTA === #}
+            {% if user.is_authenticated and not carro.vendido and carro.propietario != user and carro.precio_negociable %}
+            <div class="form-card mt-3" style="max-width:none; margin-top:1.5rem;">
+                <h2 style="font-size:1.1rem; margin-bottom:0.4rem;">Hacer una oferta</h2>
+                <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:0.8rem;">Negocia el precio directamente con el vendedor.</p>
+                <form method="post" action="{% url 'crear_oferta' carro.id %}">
+                    {% csrf_token %}
+                    <input type="number" name="monto" placeholder="Tu oferta en $" required min="1" style="width:100%; padding:0.8rem; border:1px solid var(--border); border-radius:8px; margin-bottom:0.6rem; font-size:1rem;">
+                    <textarea name="mensaje" rows="2" placeholder="Mensaje (opcional)" style="width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; margin-bottom:0.6rem;"></textarea>
+                    <button type="submit" class="btn btn-primary" style="width:100%;">Enviar oferta</button>
+                </form>
+                {% if mis_ofertas %}
+                <div style="margin-top:1rem; border-top:1px solid var(--border); padding-top:0.8rem;">
+                    <small style="font-weight:700; color:var(--text-soft); text-transform:uppercase;">Tus ofertas previas:</small>
+                    {% for o in mis_ofertas %}
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                        <strong>${{ o.monto|floatformat:0 }}</strong>
+                        <span class="offer-status {{ o.estado }}">{{ o.get_estado_display }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if similares %}
+    <h2 class="section-title mt-3">Carros similares</h2>
+    <div class="catalog-grid">
+        {% for c in similares %}
+        <a href="{% url 'detalle_carro' c.id %}" class="car-card">
+            <div class="car-img">{% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}</div>
+            <div class="car-body">
+                <h3>{{ c.marca }} {{ c.modelo }}</h3>
+                <div class="car-price">${{ c.precio|floatformat:0 }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const PRECIO_BASE = {{ carro.precio }};
+function calcular() {
+    const down = parseFloat(document.getElementById('calc-down').value) || 0;
+    const meses = parseInt(document.getElementById('calc-meses').value) || 36;
+    const tasa = parseFloat(document.getElementById('calc-tasa').value) || 0;
+    const monto = Math.max(PRECIO_BASE - down, 0);
+    const i = (tasa / 100) / 12;
+    let cuota = 0;
+    if (monto > 0) {
+        cuota = i > 0
+            ? monto * (i * Math.pow(1+i, meses)) / (Math.pow(1+i, meses) - 1)
+            : monto / meses;
+    }
+    document.getElementById('calc-cuota').textContent = '$' + Math.round(cuota).toLocaleString();
+}
+calcular();
+</script>
+{% endblock %}

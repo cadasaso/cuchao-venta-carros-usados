@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Editar perfil - Cuchao{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h1>Editar perfil</h1>
+    <p class="subtitle">Actualiza tu información pública</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div><label>Nombre</label><input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}"></div>
+            <div><label>Apellido</label><input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}"></div>
+        </div>
+        <label>Email</label>
+        <input type="email" name="email" value="{{ form.email.value|default:'' }}">
+        <div class="form-grid">
+            <div><label>Teléfono</label><input type="tel" name="telefono" value="{{ form.telefono.value|default:'' }}"></div>
+            <div><label>Ciudad</label><input type="text" name="ciudad" value="{{ form.ciudad.value|default:'' }}"></div>
+        </div>
+        <label>Sobre ti</label>
+        <textarea name="bio" rows="3">{{ form.bio.value|default:'' }}</textarea>
+        <label>Avatar</label>
+        {% if user.avatar %}<img src="{{ user.avatar.url }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:0.6rem;">{% endif %}
+        <input type="file" name="avatar" accept="image/*">
+        <button type="submit">Guardar cambios</button>
+    </form>
+</div>
+{% endblock %}

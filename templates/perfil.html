@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}{{ vendedor.username }} - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="form-card" style="max-width:none; margin:0 0 2rem;">
+        <div class="flex" style="gap:1.5rem; flex-wrap:wrap;">
+            <div class="avatar lg">{% if vendedor.avatar %}<img src="{{ vendedor.avatar.url }}">{% else %}{{ vendedor.username|first|upper }}{% endif %}</div>
+            <div style="flex:1;">
+                <h1 style="font-size:1.8rem; margin-bottom:0.3rem;">{{ vendedor.username }}</h1>
+                <p style="color:var(--text-soft);">{{ vendedor.bio|default:"Vendedor en Cuchao" }}</p>
+                <div class="flex mt-1">
+                    <strong>{{ vendedor.calificacion_promedio }}/5</strong>
+                    <span style="color:var(--text-soft);">· {{ vendedor.total_ventas }} ventas · Desde {{ vendedor.fecha_registro|date:"M Y" }}</span>
+                </div>
+                {% if vendedor.ciudad %}<p style="color:var(--text-soft); margin-top:0.4rem;">{{ vendedor.ciudad }}</p>{% endif %}
+            </div>
+            {% if user == vendedor %}
+            <a href="{% url 'editar_perfil' %}" class="btn btn-primary" style="padding:0.7rem 1.4rem; min-width:auto;">Editar perfil</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <h2 class="section-title">Carros publicados ({{ carros.count }})</h2>
+    <div class="catalog-grid mb-3">
+        {% for carro in carros %}
+        <a href="{% url 'detalle_carro' carro.id %}" class="car-card">
+            <div class="car-img">{% if carro.imagen %}<img src="{{ carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}{% if carro.vendido %}<span class="badge-vendido">Vendido</span>{% endif %}</div>
+            <div class="car-body">
+                <h3>{{ carro.marca }} {{ carro.modelo }}</h3>
+                <div class="car-price">${{ carro.precio|floatformat:0 }}</div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="empty-state" style="grid-column:1/-1;"><div class="icon"></div><h3>Sin publicaciones</h3></div>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title">Reseñas ({{ resenas.count }})</h2>
+    {% if user.is_authenticated and user != vendedor and not ya_calificado %}
+    <div class="form-card" style="max-width:none; margin-bottom:1rem;">
+        <h3 style="font-size:1rem; margin-bottom:0.8rem;">Deja tu reseña</h3>
+        <form method="post" action="{% url 'crear_resena' vendedor.username %}">
+            {% csrf_token %}
+            <label>Calificación (1-5)</label>
+            <input type="number" name="calificacion" min="1" max="5" value="5" required>
+            <label>Comentario</label>
+            <textarea name="comentario" rows="3" placeholder="Comparte tu experiencia..."></textarea>
+            <button type="submit">Publicar reseña</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div style="display:flex; flex-direction:column; gap:0.8rem;">
+        {% for r in resenas %}
+        <div class="msg-item">
+            <div class="msg-head">
+                <strong>{{ r.autor.username }}</strong>
+                <small>{{ r.fecha|date:"d/m/Y" }}</small>
+            </div>
+            <div class="stars">{{ r.calificacion }}/5</div>
+            <p style="color:var(--text-soft); margin-top:0.4rem;">{{ r.comentario }}</p>
+        </div>
+        {% empty %}
+        <div class="empty-state"><div class="icon"></div><h3>Sin reseñas todavía</h3></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

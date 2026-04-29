@@ -1,36 +1,307 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="{% if tema_oscuro_user %}dark{% else %}light{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cuchao - Compra y Venta de Carros{% endblock %}</title>
+    <title>{% block title %}Cuchao - Marketplace de carros usados{% endblock %}</title>
     {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'carros/styles.css' %}">
+    <script>
+        // Aplica tema antes del render para evitar flash
+        (function() {
+            const saved = localStorage.getItem('cuchao-theme');
+            if (saved) document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-left">
-                <a href="{% url 'catalogo' %}">Cuchao</a>
-            </div>
-            <div class="nav-right">
+            <a href="{% url 'catalogo' %}" class="brand">Cuchao</a>
+            <div class="nav-links">
+                <a href="{% url 'catalogo' %}">Explorar</a>
                 {% if user.is_authenticated %}
-                    <span style="color: white; margin-right: 15px;">Hola, {{user.username}}</span>
-                    <a href="{% url 'logout' %}" class="btn-login">Logout</a>
-                    {% if user.is_staff %}
-                        <a href="/admin/" class="btn-register">Panel Admin</a>
-                    {% endif %}
+                    <a href="{% url 'mis_favoritos' %}">Favoritos{% if favoritos_count %} <span class="badge-count">{{ favoritos_count }}</span>{% endif %}</a>
+                    <a href="{% url 'bandeja_mensajes' %}">Mensajes{% if mensajes_no_leidos_count %} <span class="badge-count">{{ mensajes_no_leidos_count }}</span>{% endif %}</a>
+                    <a href="{% url 'mis_ofertas' %}">Ofertas{% if ofertas_pendientes_count %} <span class="badge-count">{{ ofertas_pendientes_count }}</span>{% endif %}</a>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+
+                    {# === DROPDOWN NOTIFICACIONES === #}
+                    <div class="dropdown" id="notif-dropdown">
+                        <button class="nav-icon-btn" onclick="toggleNotifs(event)" title="Notificaciones">
+                            🔔
+                            {% if notif_no_leidas %}<span class="badge-dot" id="notif-badge">{{ notif_no_leidas }}</span>{% endif %}
+                        </button>
+                        <div class="dropdown-panel">
+                            <div class="dropdown-head">
+                                <h4>Notificaciones</h4>
+                                <button onclick="marcarTodas()">Marcar todas leídas</button>
+                            </div>
+                            <div class="dropdown-list" id="notif-list">
+                                <div class="notif-empty">Cargando...</div>
+                            </div>
+                            <a href="{% url 'notificaciones' %}" style="padding:0.7rem; text-align:center; border-top:1px solid var(--border); color:var(--primary); font-weight:700; font-size:0.85rem;">Ver todas</a>
+                        </div>
+                    </div>
+
+                    {# === TOGGLE TEMA OSCURO === #}
+                    <button class="nav-icon-btn" onclick="toggleTema()" title="Cambiar tema" id="theme-btn">🌙</button>
+
+                    <a href="{% url 'agregar_carro' %}" class="btn-nav-primary">+ Vender</a>
+                    <a href="{% url 'perfil_publico' user.username %}" class="user-chip">
+                        {{ user.username }}{% if user.verificado %} (V){% endif %}
+                    </a>
+                    <a href="{% url 'logout' %}">Salir</a>
+                    {% if user.is_staff %}<a href="/admin/">Admin</a>{% endif %}
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn-login">Login</a>
-                    <a href="{% url 'register' %}" class="btn-register">Register</a>
+                    <button class="nav-icon-btn" onclick="toggleTema()" title="Cambiar tema" id="theme-btn">🌙</button>
+                    <a href="{% url 'login' %}">Ingresar</a>
+                    <a href="{% url 'register' %}" class="btn-nav-primary">Crear cuenta</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
+    {% if messages %}
+    <div class="flash-messages">
+        {% for message in messages %}
+            <div class="flash {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <main>
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
+
+    {# === BARRA DE COMPARACIÓN FLOTANTE === #}
+    <div class="compare-bar" id="compare-bar">
+        <span class="label">Comparar:</span>
+        <div class="compare-thumbs" id="compare-thumbs"></div>
+        <button class="btn-compare-action" onclick="irComparar()">Comparar</button>
+        <button class="btn-compare-action" style="background:var(--surface-2); color:var(--text);" onclick="limpiarComparar()">Limpiar</button>
+    </div>
+
+    {# === SCROLL TO TOP === #}
+    <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">TOP</button>
+
+    {# === TOAST === #}
+    <div class="toast" id="toast"></div>
+
+    {# === FOOTER === #}
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">Cuchao</div>
+                <p style="font-size:0.88rem; line-height:1.6;">El marketplace #1 de carros usados verificados. Compra y vende con confianza, directamente entre dueños.</p>
+            </div>
+            <div>
+                <h5>Explorar</h5>
+                <a href="{% url 'catalogo' %}">Catálogo</a>
+                <a href="{% url 'catalogo' %}?categoria=suv">SUVs</a>
+                <a href="{% url 'catalogo' %}?categoria=sedan">Sedanes</a>
+                <a href="{% url 'catalogo' %}?categoria=pickup">Pickups</a>
+            </div>
+            <div>
+                <h5>Mi cuenta</h5>
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'mis_compras' %}">Mis compras</a>
+                <a href="{% url 'mis_ofertas' %}">Mis ofertas</a>
+                <a href="{% url 'historial' %}">Historial</a>
+                {% else %}
+                <a href="{% url 'login' %}">Ingresar</a>
+                <a href="{% url 'register' %}">Crear cuenta</a>
+                {% endif %}
+            </div>
+            <div>
+                <h5>Soporte</h5>
+                <a href="#">Centro de ayuda</a>
+                <a href="#">Términos</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Contacto</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Cuchao · Hecho con amor para los amantes de los carros
+        </div>
+    </footer>
+
+    <script>
+    // ===== TEMA OSCURO =====
+    function toggleTema() {
+        const cur = document.documentElement.getAttribute('data-theme') || 'light';
+        const nuevo = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nuevo);
+        localStorage.setItem('cuchao-theme', nuevo);
+        document.getElementById('theme-btn').textContent = nuevo === 'dark' ? '☀️' : '🌙';
+        {% if user.is_authenticated %}
+        fetch("{% url 'toggle_tema' %}", {method:'POST', headers:{'X-CSRFToken': getCsrf()}});
+        {% endif %}
+    }
+    (function(){
+        const t = document.documentElement.getAttribute('data-theme');
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
+    })();
+
+    function getCsrf() {
+        const m = document.cookie.match(/csrftoken=([^;]+)/);
+        return m ? m[1] : '';
+    }
+
+    // ===== NOTIFICACIONES =====
+    {% if user.is_authenticated %}
+    function toggleNotifs(e) {
+        e.stopPropagation();
+        const dd = document.getElementById('notif-dropdown');
+        dd.classList.toggle('open');
+        if (dd.classList.contains('open')) cargarNotifs();
+    }
+    document.addEventListener('click', () => {
+        const dd = document.getElementById('notif-dropdown');
+        if (dd) dd.classList.remove('open');
+    });
+    function cargarNotifs() {
+        fetch("{% url 'api_notificaciones' %}").then(r => r.json()).then(data => {
+            const list = document.getElementById('notif-list');
+            if (!data.notificaciones.length) {
+                list.innerHTML = '<div class="notif-empty">No tienes notificaciones</div>';
+                return;
+            }
+            list.innerHTML = data.notificaciones.map(n => `
+                <a href="${n.url || '#'}" class="notif-item ${n.leida ? '' : 'unread'}" onclick="marcarLeida(${n.id})">
+                    <div class="notif-icon">${n.icono}</div>
+                    <div class="notif-body">
+                        <div class="notif-title">${n.titulo}</div>
+                        <div class="notif-msg">${n.mensaje || ''}</div>
+                        <div class="notif-time">${n.hace}</div>
+                    </div>
+                </a>
+            `).join('');
+            const badge = document.getElementById('notif-badge');
+            if (badge) badge.textContent = data.no_leidas;
+        });
+    }
+    function marcarLeida(id) {
+        fetch(`/api/notificaciones/${id}/leida/`, {method:'POST', headers:{'X-CSRFToken': getCsrf()}});
+    }
+    function marcarTodas() {
+        fetch("{% url 'marcar_todas_leidas' %}", {method:'POST', headers:{'X-CSRFToken': getCsrf()}})
+            .then(() => { cargarNotifs(); const b = document.getElementById('notif-badge'); if(b) b.remove(); });
+    }
+    // Polling cada 60s
+    setInterval(() => {
+        fetch("{% url 'api_notificaciones' %}").then(r => r.json()).then(d => {
+            const b = document.getElementById('notif-badge');
+            if (d.no_leidas > 0) {
+                if (b) b.textContent = d.no_leidas;
+            } else if (b) b.remove();
+        });
+    }, 60000);
+    {% endif %}
+
+    // ===== COMPARADOR =====
+    const COMPARE_KEY = 'cuchao-compare';
+    function getCompare() {
+        try { return JSON.parse(localStorage.getItem(COMPARE_KEY) || '[]'); }
+        catch (e) { return []; }
+    }
+    function saveCompare(arr) {
+        localStorage.setItem(COMPARE_KEY, JSON.stringify(arr));
+        renderCompare();
+    }
+    function toggleCompareCar(id, titulo, img, btn) {
+        let arr = getCompare();
+        const ix = arr.findIndex(x => x.id === id);
+        if (ix >= 0) {
+            arr.splice(ix, 1);
+            if (btn) { btn.classList.remove('added'); btn.textContent = 'COMP'; }
+        } else {
+            if (arr.length >= 4) { mostrarToast('Máximo 4 carros para comparar'); return; }
+            arr.push({id, titulo, img});
+            if (btn) { btn.classList.add('added'); btn.textContent = 'OK'; }
+        }
+        saveCompare(arr);
+    }
+    function renderCompare() {
+        const arr = getCompare();
+        const bar = document.getElementById('compare-bar');
+        const thumbs = document.getElementById('compare-thumbs');
+        if (!arr.length) { bar.classList.remove('show'); return; }
+        bar.classList.add('show');
+        thumbs.innerHTML = arr.map(c => `
+            <div class="compare-thumb">
+                ${c.img ? `<img src="${c.img}" alt="">` : ''}
+                <span class="x" onclick="toggleCompareCar(${c.id})">X</span>
+            </div>
+        `).join('');
+    }
+    function irComparar() {
+        const arr = getCompare();
+        if (arr.length < 2) { mostrarToast('Selecciona al menos 2 carros'); return; }
+        window.location = "{% url 'comparar_carros' %}?ids=" + arr.map(x => x.id).join(',');
+    }
+    function limpiarComparar() {
+        localStorage.removeItem(COMPARE_KEY);
+        renderCompare();
+        document.querySelectorAll('.btn-add-compare.added').forEach(b => {
+            b.classList.remove('added'); b.textContent = 'COMP';
+        });
+    }
+    // marcar botones de los que están en comparador
+    (function() {
+        const ids = getCompare().map(x => x.id);
+        document.querySelectorAll('.btn-add-compare').forEach(b => {
+            const id = parseInt(b.dataset.carId);
+            if (ids.includes(id)) { b.classList.add('added'); b.textContent = 'OK'; }
+        });
+        renderCompare();
+    })();
+
+    // ===== TOAST =====
+    function mostrarToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // ===== SCROLL TOP =====
+    window.addEventListener('scroll', () => {
+        const b = document.getElementById('scroll-top');
+        if (window.scrollY > 400) b.classList.add('show');
+        else b.classList.remove('show');
+    });
+
+    // ===== AUTOCLOSE FLASH =====
+    setTimeout(() => {
+        document.querySelectorAll('.flash').forEach(f => {
+            f.style.transition = 'all .5s';
+            f.style.opacity = '0';
+            f.style.transform = 'translateY(-20px)';
+            setTimeout(() => f.remove(), 500);
+        });
+    }, 5000);
+
+    // ===== PAGE EXIT TRANSITION =====
+    document.addEventListener('click', function(e) {
+        const a = e.target.closest('a[href]');
+        if (!a || !a.href || a.target === '_blank' || e.ctrlKey || e.metaKey || e.shiftKey) return;
+        const url = a.href;
+        if (url.startsWith('javascript:') || url.includes('#')) return;
+        try { if (new URL(url).origin !== location.origin) return; } catch(_) { return; }
+        e.preventDefault();
+        const m = document.querySelector('main');
+        m.style.transition = 'opacity .18s ease, transform .18s ease';
+        m.style.opacity = '0';
+        m.style.transform = 'translateY(-8px)';
+        setTimeout(() => { location.href = url; }, 185);
+    });
+</script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

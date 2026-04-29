@@ -1,73 +1,26 @@
 {% extends 'base.html' %}
-
-{% block title %}Registrarse - Cuchao{% endblock %}
-
+{% block title %}Crear cuenta - Cuchao{% endblock %}
 {% block content %}
-<form method="post" novalidate>
-    <h1>Crear Cuenta</h1>
-    
-    {% csrf_token %}
-    
-    {% if form.non_field_errors %}
-        <div class="error-box">
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-    
-    <div>
-        <label for="id_username" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Usuario</label>
-        <input type="text" id="id_username" name="username" placeholder="Elige un nombre de usuario" value="{{ form.username.value|default:'' }}" required>
-        {% if form.username.errors %}
-            <div class="field-error">
-                {% for error in form.username.errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_email" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Email</label>
-        <input type="email" id="id_email" name="email" placeholder="tu@email.com" value="{{ form.email.value|default:'' }}" required>
-        {% if form.email.errors %}
-            <div class="field-error">
-                {% for error in form.email.errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_password1" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Contraseña</label>
-        <input type="password" id="id_password1" name="password1" placeholder="Mínimo 8 caracteres" required>
-        {% if form.password1.errors %}
-            <div class="field-error">
-                {% for error in form.password1.errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_password2" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Confirmar Contraseña</label>
-        <input type="password" id="id_password2" name="password2" placeholder="Repite tu contraseña" required>
-        {% if form.password2.errors %}
-            <div class="field-error">
-                {% for error in form.password2.errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    
-    <button type="submit">Registrarse Ahora</button>
-    
-    <p>
-        ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a>
-    </p>
-</form>
+<div class="form-card">
+    <h1>Únete a Cuchao</h1>
+    <p class="subtitle">Compra y vende carros usados de forma fácil y segura</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="error-box">{{ form.non_field_errors }}</div>{% endif %}
+        <label for="id_username">Usuario</label>
+        <input type="text" id="id_username" name="username" value="{{ form.username.value|default:'' }}" required>
+        {% if form.username.errors %}<div class="error-box">{{ form.username.errors|join:', ' }}</div>{% endif %}
+        <label for="id_email">Email</label>
+        <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" required>
+        {% if form.email.errors %}<div class="error-box">{{ form.email.errors|join:', ' }}</div>{% endif %}
+        <label for="id_password1">Contraseña</label>
+        <input type="password" id="id_password1" name="password1" required>
+        {% if form.password1.errors %}<div class="error-box">{{ form.password1.errors|join:', ' }}</div>{% endif %}
+        <label for="id_password2">Confirmar contraseña</label>
+        <input type="password" id="id_password2" name="password2" required>
+        {% if form.password2.errors %}<div class="error-box">{{ form.password2.errors|join:', ' }}</div>{% endif %}
+        <button type="submit">Crear cuenta</button>
+        <p class="form-footer">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+    </form>
+</div>
 {% endblock %}

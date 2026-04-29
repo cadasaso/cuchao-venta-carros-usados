@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-yx%8++#d7mrex*5jp7ziok-u)^_s3jx0r4d+@e-gzmi#l#d*2w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'carros.context_processors.cuchao_globals',
             ],
         },
     },
@@ -82,7 +83,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'cuchao_db'),
         'USER': os.getenv('DB_USER', 'cuchao_user'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'Cuchao123'),
-        'HOST': os.getenv('DB_HOST', 'db'),  # 'db' para Docker, 'localhost' para local
+        'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
@@ -120,6 +121,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+
+COHERE_API_KEY = os.getenv('COHERE_API_KEY', '')
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'

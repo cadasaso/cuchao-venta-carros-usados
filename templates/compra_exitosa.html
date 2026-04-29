@@ -1,72 +1,40 @@
 {% extends 'base.html' %}
-
-{% block title %}Compra Exitosa - Cuchao{% endblock %}
-
+{% block title %}¡Compra exitosa! - Cuchao{% endblock %}
 {% block content %}
-<div style="max-width: 600px; margin: 2rem auto; padding: 2rem;">
-    
-    <div style="background-color: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center;">
-        
-        <div style="margin-bottom: 2rem;">
-            <div style="width: 80px; height: 80px; background-color: #dcfce7; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 3rem;">✔</span>
+<div class="container-narrow">
+    <div class="form-card text-center" style="max-width:none;">
+        <div style="width:90px; height:90px; background:linear-gradient(135deg,#10b981,#059669); border-radius:50%; margin:0 auto 1.2rem; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:900; color:white; box-shadow:0 12px 30px rgba(16,185,129,.4);">OK</div>
+        <h1 style="color:var(--success); font-size:2rem; margin-bottom:0.4rem;">¡Compra realizada!</h1>
+        <p class="subtitle">Tu transacción se procesó correctamente</p>
+
+        <div style="background:var(--surface-2); padding:1.5rem; border-radius:12px; text-align:left; margin-bottom:1.5rem;">
+            <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-soft); font-weight:600;">Producto</span>
+                <strong>{{ compra.carro.marca }} {{ compra.carro.modelo }}</strong>
+            </div>
+            <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-soft); font-weight:600;">Precio</span>
+                <strong style="color:var(--success); font-size:1.2rem;">${{ compra.precio_pagado|floatformat:0 }}</strong>
+            </div>
+            <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-soft); font-weight:600;">Método</span>
+                <strong>{{ compra.get_metodo_pago_display }}</strong>
+            </div>
+            <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-soft); font-weight:600;">Fecha</span>
+                <strong>{{ compra.fecha_compra|date:"d/m/Y H:i" }}</strong>
+            </div>
+            <div class="flex-between" style="padding:0.5rem 0;">
+                <span style="color:var(--text-soft); font-weight:600;">ID transacción</span>
+                <strong>#CCH-{{ compra.id }}</strong>
             </div>
         </div>
-        
-        <h1 style="color: #10b981; margin: 0 0 0.5rem 0; font-size: 2rem;">¡Compra Realizada!</h1>
-        <p style="color: #64748b; margin: 0 0 2rem 0; font-size: 1.1rem;">Tu compra ha sido procesada exitosamente</p>
-        
-        <div style="background-color: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
-            
-            <h2 style="color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; font-size: 1.1rem;">Detalles de tu compra:</h2>
-            
-            <div style="margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #e2e8f0;">
-                <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">PRODUCTO:</label>
-                <p style="color: #0f172a; margin: 0; font-size: 1.1rem; font-weight: 600;">{{ compra.carro.modelo }}</p>
-            </div>
-            
-            <div style="margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #e2e8f0;">
-                <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">PRECIO PAGADO:</label>
-                <p style="color: #10b981; margin: 0; font-size: 1.3rem; font-weight: bold;">${{ compra.precio_pagado }}</p>
-            </div>
-            
-            <div style="margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #e2e8f0;">
-                <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">MÉTODO DE PAGO:</label>
-                <p style="color: #0f172a; margin: 0;">
-                    {% if compra.metodo_pago == 'efectivo' %}
-                        Efectivo
-                    {% elif compra.metodo_pago == 'pse' %}
-                        PSE (Simulado)
-                    {% else %}
-                        {{ compra.metodo_pago }}
-                    {% endif %}
-                </p>
-            </div>
-            
-            <div style="margin-bottom: 1.2rem;">
-                <label style="color: #64748b; font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.9rem;">FECHA Y HORA:</label>
-                <p style="color: #0f172a; margin: 0;">{{ compra.fecha_compra|date:"d/m/Y H:i" }}</p>
-            </div>
-            
+
+        <div class="flash warning">Compra simulada para demostración.</div>
+        <div class="flex" style="margin-top:1.2rem;">
+            <a href="{% url 'catalogo' %}" class="btn btn-ghost" style="padding:0.95rem;">Volver al catálogo</a>
+            <a href="{% url 'mis_compras' %}" class="btn btn-primary" style="padding:0.95rem;">Mis compras</a>
         </div>
-        
-        <div style="background-color: #fef3c7; padding: 1rem; border-left: 4px solid #f59e0b; border-radius: 4px; margin-bottom: 2rem;">
-            <p style="margin: 0; color: #92400e; font-size: 0.9rem;">
-                <strong>Esta es una compra simulada.</strong> No se ha realizado ningún pago real. Este sistema es solo para demostración.
-            </p>
-        </div>
-        
-        <div style="background-color: #eff6ff; padding: 1rem; border-radius: 6px; margin-bottom: 2rem;">
-            <p style="color: #1e3a8a; margin: 0; font-size: 0.9rem;">
-                <strong>ID de Transacción:</strong> #COMPRA-{{ compra.id }}
-            </p>
-        </div>
-        
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <a href="{% url 'catalogo' %}" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px 20px; border: none; border-radius: 6px; text-align: center; text-decoration: none; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);">Volver al Catálogo</a>
-        </div>
-        
     </div>
-    
 </div>
 {% endblock %}

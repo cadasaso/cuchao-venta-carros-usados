@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Notificaciones - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="section-title">Todas las notificaciones</h1>
+    <p class="section-subtitle">Tu actividad reciente en Cuchao</p>
+
+    <div class="msg-list">
+        {% for n in notificaciones %}
+        <a href="{{ n.url|default:'#' }}" class="msg-item {% if not n.leida %}unread{% endif %}" style="display:flex; gap:1rem; align-items:flex-start; color:inherit;">
+            <div class="notif-icon" style="width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg, rgba(99,102,241,.15), rgba(139,92,246,.15)); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:var(--primary);">{{ n.get_tipo_display|truncatechars:3 }}</div>
+            <div style="flex:1;">
+                <div class="msg-head">
+                    <strong>{{ n.titulo }}</strong>
+                    <small>{{ n.fecha|date:"d/m/Y H:i" }}</small>
+                </div>
+                <p style="color:var(--text-soft); font-size:0.9rem; margin:0.3rem 0;">{{ n.mensaje }}</p>
+                <span class="tag-chip">{{ n.get_tipo_display }}</span>
+            </div>
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <div class="icon"></div>
+            <h3>Sin notificaciones</h3>
+            <p>Cuando recibas mensajes, ofertas o ventas aparecerán aquí.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

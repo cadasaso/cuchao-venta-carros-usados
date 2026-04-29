@@ -1,33 +1,18 @@
 {% extends 'base.html' %}
-
-{% block title %}Login - Cuchao{% endblock %}
-
+{% block title %}Iniciar sesión - Cuchao{% endblock %}
 {% block content %}
-<form method="post" novalidate>
-    <h1>Inicia Sesión</h1>
-    
-    {% csrf_token %}
-    
-    {% if error %}
-        <div class="error-box">
-            <p>{{ error }}</p>
-        </div>
-    {% endif %}
-    
-    <div>
-        <label for="id_username" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Usuario</label>
-        <input type="text" id="id_username" name="username" placeholder="Ingresa tu usuario" required>
-    </div>
-    
-    <div>
-        <label for="id_password" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Contraseña</label>
-        <input type="password" id="id_password" name="password" placeholder="Ingresa tu contraseña" required>
-    </div>
-    
-    <button type="submit">Entrar</button>
-    
-    <p>
-        ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>
-    </p>
-</form>
+<div class="form-card">
+    <h1>Bienvenido de vuelta</h1>
+    <p class="subtitle">Inicia sesión para acceder a tu cuenta</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+        <label for="id_username">Usuario</label>
+        <input type="text" id="id_username" name="username" placeholder="Tu usuario" required>
+        <label for="id_password">Contraseña</label>
+        <input type="password" id="id_password" name="password" placeholder="••••••••" required>
+        <button type="submit">Entrar</button>
+        <p class="form-footer">¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate gratis</a></p>
+    </form>
+</div>
 {% endblock %}

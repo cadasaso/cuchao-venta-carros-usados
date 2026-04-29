@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}Chat con {{ otro.username }} - Cuchao{% endblock %}
+{% block content %}
+<div class="container-narrow" style="padding-top:1.5rem; padding-bottom:0;">
+    <div class="chat-wrap">
+
+        <div class="chat-header">
+            <a href="{% url 'bandeja_mensajes' %}" class="chat-back" title="Volver">&#8592;</a>
+            <div class="chat-header-av">{{ otro.username|first|upper }}</div>
+            <div class="chat-header-info">
+                <div class="chat-header-name">
+                    {{ otro.username }}
+                    {% if otro.verificado %}<span class="badge-verified">Verificado</span>{% endif %}
+                </div>
+                <a href="{% url 'detalle_carro' carro.id %}" class="chat-header-car">
+                    {{ carro.marca }} {{ carro.modelo }}{% if carro.anio %} &middot; {{ carro.anio }}{% endif %} &mdash; ${{ carro.precio|floatformat:0 }}
+                </a>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            {% for m in mensajes %}
+            {% ifchanged m.fecha|date:"Y-m-d" %}
+            <div class="chat-date-sep">{{ m.fecha|date:"d \d\e F \d\e Y" }}</div>
+            {% endifchanged %}
+            <div class="chat-msg {% if m.remitente == user %}chat-msg--mine{% else %}chat-msg--other{% endif %}" data-id="{{ m.id }}">
+                {% if m.remitente != user %}<div class="chat-msg-av">{{ otro.username|first|upper }}</div>{% endif %}
+                <div class="chat-msg-content">
+                    <div class="chat-bubble">{{ m.contenido }}</div>
+                    <div class="chat-time">{{ m.fecha|date:"H:i" }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="chat-empty" id="chat-empty">
+                Sin mensajes aún. Escribe algo para empezar.
+            </div>
+            {% endfor %}
+        </div>
+
+        <form class="chat-form" id="chat-form" onsubmit="enviarMensaje(event)">
+            {% csrf_token %}
+            <textarea id="chat-input" name="contenido" placeholder="Escribe un mensaje… (Enter para enviar)" rows="1" maxlength="1000" required></textarea>
+            <button type="submit" class="chat-send-btn" title="Enviar">&#10148;</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const CARRO_ID  = {{ carro.id }};
+const USERNAME  = '{{ otro.username|escapejs }}';
+const AV_LETTER = '{{ otro.username|first|upper }}';
+let lastId = {{ mensajes.last.id|default:0 }};
+
+function scrollDown() {
+    const c = document.getElementById('chat-messages');
+    c.scrollTop = c.scrollHeight;
+}
+scrollDown();
+
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function addMsg(id, contenido, fecha, mine) {
+    const empty = document.getElementById('chat-empty');
+    if (empty) empty.remove();
+    const c = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + (mine ? 'chat-msg--mine' : 'chat-msg--other');
+    div.dataset.id = id;
+    const av = mine ? '' : `<div class="chat-msg-av">${AV_LETTER}</div>`;
+    div.innerHTML = `${av}<div class="chat-msg-content"><div class="chat-bubble">${escHtml(contenido)}</div><div class="chat-time">${fecha}</div></div>`;
+    c.appendChild(div);
+    scrollDown();
+}
+
+function enviarMensaje(e) {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const contenido = input.value.trim();
+    if (!contenido) return;
+    const btn = document.querySelector('.chat-send-btn');
+    btn.disabled = true;
+    const fd = new FormData();
+    fd.append('contenido', contenido);
+    fetch(`/api/chat/${CARRO_ID}/${USERNAME}/enviar/`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCsrf()},
+        body: fd,
+    })
+    .then(r => r.json())
+    .then(res => {
+        btn.disabled = false;
+        if (res.ok) {
+            addMsg(res.id, res.contenido, res.fecha, true);
+            input.value = '';
+            input.style.height = 'auto';
+            lastId = Math.max(lastId, res.id);
+        }
+    })
+    .catch(() => { btn.disabled = false; });
+}
+
+// Poll cada 3s para mensajes entrantes
+setInterval(() => {
+    fetch(`/api/chat/${CARRO_ID}/${USERNAME}/poll/?since=${lastId}`)
+        .then(r => r.json())
+        .then(d => {
+            d.mensajes.forEach(m => {
+                if (!document.querySelector(`[data-id="${m.id}"]`)) {
+                    addMsg(m.id, m.contenido, m.fecha, m.es_mio);
+                    lastId = Math.max(lastId, m.id);
+                }
+            });
+        });
+}, 3000);
+
+// Auto-resize textarea
+const inp = document.getElementById('chat-input');
+inp.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+    }
+});
+inp.focus();
+</script>
+{% endblock %}

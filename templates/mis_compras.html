@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Mis compras - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="section-title">Mis compras</h1>
+    <div class="table-card">
+        <table>
+            <thead><tr><th>ID</th><th>Carro</th><th>Vendedor</th><th>Método</th><th>Precio</th><th>Fecha</th></tr></thead>
+            <tbody>
+            {% for c in compras %}
+                <tr>
+                    <td>#CCH-{{ c.id }}</td>
+                    <td><a href="{% url 'detalle_carro' c.carro.id %}" style="color:var(--primary); font-weight:600;">{{ c.carro.marca }} {{ c.carro.modelo }}</a></td>
+                    <td>{{ c.carro.propietario.username }}</td>
+                    <td>{{ c.get_metodo_pago_display }}</td>
+                    <td><strong>${{ c.precio_pagado|floatformat:0 }}</strong></td>
+                    <td>{{ c.fecha_compra|date:"d/m/Y" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-soft);">Aún no has realizado compras</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

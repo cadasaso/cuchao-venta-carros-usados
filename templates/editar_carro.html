@@ -1,59 +1,93 @@
 {% extends 'base.html' %}
-
-{% block title %}Editar Carro - Cuchao{% endblock %}
-
+{% block title %}Editar carro - Cuchao{% endblock %}
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
-    <h1>Editar Carro</h1>
-    
-    {% csrf_token %}
-    
-    <div>
-        <label for="id_modelo" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Modelo</label>
-        <input type="text" id="id_modelo" name="modelo" placeholder="Ej: Honda Civic 2020" value="{{ form.modelo.value|default:'' }}" required>
-        {% if form.modelo.errors %}
-            <div class="field-error">
-                {% for error in form.modelo.errors %}{{ error }}{% endfor %}
+<div class="form-card" style="max-width: 720px;">
+    <h1>Editar carro</h1>
+    <p class="subtitle">Actualiza la información de tu publicación</p>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_modelo">Modelo *</label>
+        <input type="text" id="id_modelo" name="modelo" value="{{ form.modelo.value|default:'' }}" required>
+
+        <div class="form-grid">
+            <div>
+                <label>Marca</label>
+                <input type="text" name="marca" value="{{ form.marca.value|default:'' }}">
             </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_descripcion" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Descripción</label>
-        <textarea id="id_descripcion" name="descripcion" placeholder="Describe tu carro..." rows="4">{{ form.descripcion.value|default:'' }}</textarea>
-        {% if form.descripcion.errors %}
-            <div class="field-error">
-                {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
+            <div>
+                <label>Año</label>
+                <input type="number" name="anio" value="{{ form.anio.value|default:'' }}">
             </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_precio" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Precio ($)</label>
-        <input type="number" id="id_precio" name="precio" placeholder="Ej: 50000" step="0.01" value="{{ form.precio.value|default:'' }}" required>
-        {% if form.precio.errors %}
-            <div class="field-error">
-                {% for error in form.precio.errors %}{{ error }}{% endfor %}
+            <div>
+                <label>Kilometraje</label>
+                <input type="number" name="kilometraje" value="{{ form.kilometraje.value|default:'' }}">
             </div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_imagen" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Imagen</label>
-        {% if carro.imagen %}
-            <div style="margin-bottom: 1rem;">
-                <img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}" style="max-width: 200px; border-radius: 8px;">
+            <div>
+                <label>Color</label>
+                <input type="text" name="color" value="{{ form.color.value|default:'' }}">
             </div>
-        {% endif %}
-        <input type="file" id="id_imagen" name="imagen" accept="image/*">
-        {% if form.imagen.errors %}
-            <div class="field-error">
-                {% for error in form.imagen.errors %}{{ error }}{% endfor %}
+            <div>
+                <label>Transmisión</label>
+                <select name="transmision">
+                    <option value="">--</option>
+                    <option value="manual" {% if form.transmision.value == 'manual' %}selected{% endif %}>Manual</option>
+                    <option value="automatica" {% if form.transmision.value == 'automatica' %}selected{% endif %}>Automática</option>
+                </select>
             </div>
-        {% endif %}
-    </div>
-    
-    <button type="submit">Guardar Cambios</button>
-    <a href="{% url 'catalogo' %}" style="display: inline-block; margin-top: 1rem; color: #3b82f6; text-decoration: none; font-weight: bold;">← Volver al catálogo</a>
-</form>
+            <div>
+                <label>Combustible</label>
+                <select name="combustible">
+                    <option value="">--</option>
+                    <option value="gasolina" {% if form.combustible.value == 'gasolina' %}selected{% endif %}>Gasolina</option>
+                    <option value="diesel" {% if form.combustible.value == 'diesel' %}selected{% endif %}>Diésel</option>
+                    <option value="hibrido" {% if form.combustible.value == 'hibrido' %}selected{% endif %}>Híbrido</option>
+                    <option value="electrico" {% if form.combustible.value == 'electrico' %}selected{% endif %}>Eléctrico</option>
+                    <option value="gas" {% if form.combustible.value == 'gas' %}selected{% endif %}>Gas</option>
+                </select>
+            </div>
+            <div>
+                <label>Categoría</label>
+                <select name="categoria">
+                    <option value="">--</option>
+                    <option value="sedan" {% if form.categoria.value == 'sedan' %}selected{% endif %}>Sedán</option>
+                    <option value="suv" {% if form.categoria.value == 'suv' %}selected{% endif %}>SUV</option>
+                    <option value="hatchback" {% if form.categoria.value == 'hatchback' %}selected{% endif %}>Hatchback</option>
+                    <option value="pickup" {% if form.categoria.value == 'pickup' %}selected{% endif %}>Pickup</option>
+                    <option value="coupe" {% if form.categoria.value == 'coupe' %}selected{% endif %}>Coupé</option>
+                    <option value="convertible" {% if form.categoria.value == 'convertible' %}selected{% endif %}>Convertible</option>
+                    <option value="van" {% if form.categoria.value == 'van' %}selected{% endif %}>Van</option>
+                    <option value="deportivo" {% if form.categoria.value == 'deportivo' %}selected{% endif %}>Deportivo</option>
+                </select>
+            </div>
+            <div>
+                <label>Estado</label>
+                <select name="estado">
+                    <option value="">--</option>
+                    <option value="excelente" {% if form.estado.value == 'excelente' %}selected{% endif %}>Excelente</option>
+                    <option value="muy_bueno" {% if form.estado.value == 'muy_bueno' %}selected{% endif %}>Muy bueno</option>
+                    <option value="bueno" {% if form.estado.value == 'bueno' %}selected{% endif %}>Bueno</option>
+                    <option value="regular" {% if form.estado.value == 'regular' %}selected{% endif %}>Regular</option>
+                </select>
+            </div>
+            <div>
+                <label>Ciudad</label>
+                <input type="text" name="ciudad" value="{{ form.ciudad.value|default:'' }}">
+            </div>
+            <div>
+                <label>Precio *</label>
+                <input type="number" name="precio" value="{{ form.precio.value|default:'' }}" step="0.01" required>
+            </div>
+        </div>
+
+        <label>Descripción</label>
+        <textarea name="descripcion" rows="4">{{ form.descripcion.value|default:'' }}</textarea>
+
+        <label>Foto principal</label>
+        {% if carro.imagen %}<img src="{{ carro.imagen.url }}" style="max-width:200px; border-radius:10px; margin-bottom:0.8rem;">{% endif %}
+        <input type="file" name="imagen" accept="image/*">
+
+        <button type="submit">Guardar cambios</button>
+        <p class="form-footer"><a href="{% url 'catalogo' %}">Volver al catálogo</a></p>
+    </form>
+</div>
 {% endblock %}

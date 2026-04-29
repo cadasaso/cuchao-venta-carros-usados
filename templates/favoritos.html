@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Mis favoritos - Cuchao{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="section-title">Mis favoritos</h1>
+    <p class="section-subtitle">Carros que has guardado para ver más tarde</p>
+
+    <div class="catalog-grid">
+        {% for fav in favoritos %}
+        <div class="car-card">
+            <a href="{% url 'detalle_carro' fav.carro.id %}" class="car-img">
+                {% if fav.carro.imagen %}<img src="{{ fav.carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}
+                {% if fav.carro.vendido %}<span class="badge-vendido">Vendido</span>{% else %}<span class="badge-disponible">Disponible</span>{% endif %}
+            </a>
+            <div class="car-body">
+                <h3>{{ fav.carro.marca }} {{ fav.carro.modelo }}</h3>
+                <div class="car-price">${{ fav.carro.precio|floatformat:0 }}</div>
+                <div class="car-actions">
+                    <a href="{% url 'detalle_carro' fav.carro.id %}" class="btn btn-primary">Ver</a>
+                    <form method="post" action="{% url 'toggle_favorito' fav.carro.id %}" style="flex:1;">
+                        {% csrf_token %}
+                        <button class="btn btn-ghost" type="submit" style="width:100%;">Quitar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon"></div>
+            <h3>No tienes favoritos aún</h3>
+            <p>Explora el catálogo y guarda los carros que te interesen</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

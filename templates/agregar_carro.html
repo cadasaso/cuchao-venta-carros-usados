@@ -1,44 +1,223 @@
 {% extends 'base.html' %}
-{% block title %}Agregar Carro{% endblock %}
-
+{% block title %}Publicar carro - Cuchao{% endblock %}
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
-    <h1>Agregar Carro</h1>
-    {% csrf_token %}
-    
-    <div>
-        <label for="id_modelo" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Modelo</label>
-        <input type="text" id="id_modelo" name="modelo" placeholder="Ej: Honda Civic 2020" required>
-        {% if form.modelo.errors %}
-            <div class="field-error">{% for error in form.modelo.errors %}{{ error }}{% endfor %}</div>
+<div class="form-card" style="max-width: 720px;">
+    <h1>Publicar carro</h1>
+    <p class="subtitle">Completa los datos para listar tu carro en el marketplace</p>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_modelo">Modelo *</label>
+        <input type="text" id="id_modelo" name="modelo" value="{{ form.modelo.value|default:'' }}" required>
+
+        <div class="form-grid">
+            <div>
+                <label for="id_marca">Marca</label>
+                <input type="text" id="id_marca" name="marca" value="{{ form.marca.value|default:'' }}" placeholder="Toyota">
+            </div>
+            <div>
+                <label for="id_anio">Año</label>
+                <input type="number" id="id_anio" name="anio" value="{{ form.anio.value|default:'' }}" placeholder="2020">
+            </div>
+            <div>
+                <label for="id_kilometraje">Kilometraje</label>
+                <input type="number" id="id_kilometraje" name="kilometraje" value="{{ form.kilometraje.value|default:'' }}" placeholder="45000">
+            </div>
+            <div>
+                <label for="id_color">Color</label>
+                <input type="text" id="id_color" name="color" value="{{ form.color.value|default:'' }}" placeholder="Negro">
+            </div>
+            <div>
+                <label for="id_transmision">Transmisión</label>
+                <select name="transmision" id="id_transmision">
+                    <option value="">--</option>
+                    <option value="manual" {% if form.transmision.value == 'manual' %}selected{% endif %}>Manual</option>
+                    <option value="automatica" {% if form.transmision.value == 'automatica' %}selected{% endif %}>Automática</option>
+                </select>
+            </div>
+            <div>
+                <label for="id_combustible">Combustible</label>
+                <select name="combustible" id="id_combustible">
+                    <option value="">--</option>
+                    <option value="gasolina" {% if form.combustible.value == 'gasolina' %}selected{% endif %}>Gasolina</option>
+                    <option value="diesel" {% if form.combustible.value == 'diesel' %}selected{% endif %}>Diésel</option>
+                    <option value="hibrido" {% if form.combustible.value == 'hibrido' %}selected{% endif %}>Híbrido</option>
+                    <option value="electrico" {% if form.combustible.value == 'electrico' %}selected{% endif %}>Eléctrico</option>
+                    <option value="gas" {% if form.combustible.value == 'gas' %}selected{% endif %}>Gas</option>
+                </select>
+            </div>
+            <div>
+                <label for="id_categoria">Categoría</label>
+                <select name="categoria" id="id_categoria">
+                    <option value="">--</option>
+                    <option value="sedan">Sedán</option>
+                    <option value="suv">SUV</option>
+                    <option value="hatchback">Hatchback</option>
+                    <option value="pickup">Pickup</option>
+                    <option value="coupe">Coupé</option>
+                    <option value="convertible">Convertible</option>
+                    <option value="van">Van</option>
+                    <option value="deportivo">Deportivo</option>
+                </select>
+            </div>
+            <div>
+                <label for="id_estado">Estado</label>
+                <select name="estado" id="id_estado">
+                    <option value="">--</option>
+                    <option value="excelente">Excelente</option>
+                    <option value="muy_bueno">Muy bueno</option>
+                    <option value="bueno">Bueno</option>
+                    <option value="regular">Regular</option>
+                </select>
+            </div>
+            <div>
+                <label for="id_ciudad">Ciudad</label>
+                <input type="text" id="id_ciudad" name="ciudad" value="{{ form.ciudad.value|default:'' }}" placeholder="Bogotá">
+            </div>
+            <div>
+                <label for="id_precio">Precio (USD) *</label>
+                <input type="number" id="id_precio" name="precio" value="{{ form.precio.value|default:'' }}" step="0.01" required>
+            </div>
+        </div>
+
+        {# === GENERADOR IA === #}
+        <div style="margin:1.5rem 0; padding:1.2rem; background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(139,92,246,.07)); border:1px solid rgba(99,102,241,.3); border-radius:12px;">
+            <strong style="color:var(--primary); font-size:0.95rem;">Generar descripcion con IA</strong>
+            <p style="font-size:0.82rem; color:var(--text-soft); margin:0.3rem 0 0.9rem;">Completa Marca, Modelo y Año para generar automaticamente un titulo y descripcion profesional.</p>
+            <button type="button" id="btn-ia" class="btn btn-primary" onclick="generarConIA()" style="padding:0.7rem 1.4rem;">
+                Generar con IA
+            </button>
+            <span id="ia-loading" style="display:none; margin-left:0.8rem; font-size:0.88rem; color:var(--text-soft);">Generando...</span>
+            <div id="ia-error" style="display:none; margin-top:0.7rem; padding:0.7rem 1rem; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.3); border-radius:8px; font-size:0.88rem; color:#ef4444;"></div>
+
+            <div id="ia-preview" style="display:none; margin-top:1.2rem;">
+                <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:var(--text-soft); letter-spacing:.05em; margin-bottom:0.3rem;">Titulo sugerido</div>
+                    <div id="ia-titulo" style="font-size:1rem; font-weight:700; color:var(--text); margin-bottom:1rem;"></div>
+
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:var(--text-soft); letter-spacing:.05em; margin-bottom:0.3rem;">Descripcion</div>
+                    <p id="ia-descripcion" style="font-size:0.88rem; color:var(--text-soft); line-height:1.65; margin-bottom:1rem;"></p>
+
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:var(--text-soft); letter-spacing:.05em; margin-bottom:0.4rem;">Ventajas</div>
+                    <ul id="ia-ventajas" style="margin:0 0 1rem 1.2rem; padding:0; font-size:0.88rem; color:var(--text-soft); line-height:1.8;"></ul>
+
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:var(--text-soft); letter-spacing:.05em; margin-bottom:0.3rem;">Texto de cierre</div>
+                    <p id="ia-persuasivo" style="font-size:0.88rem; font-style:italic; color:var(--primary); line-height:1.6; margin:0;"></p>
+                </div>
+                <button type="button" class="btn btn-success" style="width:100%; margin-top:0.8rem; padding:0.8rem;" onclick="usarDescripcion()">
+                    Usar esta descripcion en el formulario
+                </button>
+            </div>
+        </div>
+
+        <label for="id_descripcion">Descripcion</label>
+        <textarea id="id_descripcion" name="descripcion" rows="4">{{ form.descripcion.value|default:'' }}</textarea>
+
+        <label for="id_imagen">Foto principal</label>
+        <input type="file" id="id_imagen" name="imagen" accept="image/*">
+
+        <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; margin-top:0.5rem;">
+            <input type="checkbox" name="precio_negociable" checked style="width:auto;">
+            Precio negociable (recibe ofertas)
+        </label>
+
+        {% if form.etiquetas.field.queryset %}
+        <label style="margin-top:1rem;">Etiquetas</label>
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+            {% for et in form.etiquetas.field.queryset %}
+            <label style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.4rem 0.8rem; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; cursor:pointer; text-transform:none;">
+                <input type="checkbox" name="etiquetas" value="{{ et.id }}" style="width:auto;">
+                {{ et.nombre }}
+            </label>
+            {% endfor %}
+        </div>
         {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_descripcion" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Descripción</label>
-        <textarea id="id_descripcion" name="descripcion" placeholder="Describe tu carro..." rows="4"></textarea>
-        {% if form.descripcion.errors %}
-            <div class="field-error">{% for error in form.descripcion.errors %}{{ error }}{% endfor %}</div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_precio" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">Precio ($)</label>
-        <input type="number" id="id_precio" name="precio" placeholder="Ej: 50000" step="0.01" required>
-        {% if form.precio.errors %}
-            <div class="field-error">{% for error in form.precio.errors %}{{ error }}{% endfor %}</div>
-        {% endif %}
-    </div>
-    
-    <div>
-        <label for="id_imagen" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #0f172a;">📷 Imagen del Carro</label>
-        <input type="file" id="id_imagen" name="imagen" accept="image/*" required>
-        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">Sube una foto clara de tu carro</p>
-        {% if form.imagen.errors %}
-            <div class="field-error">{% for error in form.imagen.errors %}{{ error }}{% endfor %}</div>
-        {% endif %}
-    </div>
-    
-    <button type="submit">Publicar Carro</button>
-</form>
+
+        <button type="submit">Publicar carro</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let _iaData = null;
+
+function generarConIA() {
+    const marca = document.getElementById('id_marca').value.trim();
+    const modelo = document.getElementById('id_modelo').value.trim();
+    const anio = document.getElementById('id_anio').value.trim();
+    const km = document.getElementById('id_kilometraje').value.trim();
+
+    const errDiv = document.getElementById('ia-error');
+    errDiv.style.display = 'none';
+
+    if (!marca || !modelo || !anio) {
+        errDiv.textContent = 'Completa los campos Marca, Modelo y Año antes de generar.';
+        errDiv.style.display = 'block';
+        return;
+    }
+
+    const btn = document.getElementById('btn-ia');
+    const loading = document.getElementById('ia-loading');
+    btn.disabled = true;
+    loading.style.display = 'inline';
+    document.getElementById('ia-preview').style.display = 'none';
+
+    const form = new FormData();
+    form.append('marca', marca);
+    form.append('modelo', modelo);
+    form.append('anio', anio);
+    form.append('kilometraje', km);
+
+    fetch('{% url "generar_descripcion_ia" %}', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCsrf() },
+        body: form,
+    })
+    .then(r => r.json())
+    .then(res => {
+        btn.disabled = false;
+        loading.style.display = 'none';
+
+        if (res.error) {
+            errDiv.textContent = res.error;
+            errDiv.style.display = 'block';
+            return;
+        }
+
+        _iaData = res.data;
+        document.getElementById('ia-titulo').textContent = res.data.titulo || '';
+        document.getElementById('ia-descripcion').textContent = res.data.descripcion || '';
+
+        const ul = document.getElementById('ia-ventajas');
+        ul.innerHTML = '';
+        (res.data.ventajas || []).forEach(v => {
+            const li = document.createElement('li');
+            li.textContent = v;
+            ul.appendChild(li);
+        });
+
+        document.getElementById('ia-persuasivo').textContent = res.data.texto_persuasivo || '';
+        document.getElementById('ia-preview').style.display = 'block';
+    })
+    .catch(() => {
+        btn.disabled = false;
+        loading.style.display = 'none';
+        errDiv.textContent = 'No se pudo conectar con el servidor. Intenta de nuevo.';
+        errDiv.style.display = 'block';
+    });
+}
+
+function usarDescripcion() {
+    if (!_iaData) return;
+    const ventajas = (_iaData.ventajas || []).map(v => '- ' + v).join('\n');
+    const texto = [
+        _iaData.descripcion || '',
+        ventajas ? '\nVentajas:\n' + ventajas : '',
+        _iaData.texto_persuasivo ? '\n' + _iaData.texto_persuasivo : '',
+    ].join('\n').trim();
+
+    document.getElementById('id_descripcion').value = texto;
+    document.getElementById('id_descripcion').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
 {% endblock %}
