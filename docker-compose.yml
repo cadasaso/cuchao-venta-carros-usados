@@ -4,6 +4,7 @@ services:
   db:
     image: postgres:16-alpine
     container_name: cuchao_db
+    restart: always
     environment:
       POSTGRES_DB: cuchao_db
       POSTGRES_USER: cuchao_user
@@ -21,6 +22,7 @@ services:
   web:
     build: .
     container_name: cuchao_web
+    restart: always
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn cuchao.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
