@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}{{ carro.marca }} {{ carro.modelo }} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -24,7 +25,7 @@
                 {% else %}<span class="badge-disponible" style="position:static; display:inline-block; margin-bottom:0.6rem;">Disponible</span>{% endif %}
                 <h1>{{ carro.marca }} {{ carro.modelo }}</h1>
                 <p style="color:var(--text-soft);">{{ carro.ciudad|default:"Ubicación no especificada" }} · {{ carro.vistas }} vistas</p>
-                <div class="price-big">${{ carro.precio|floatformat:0 }}</div>
+                <div class="price-big">${{ carro.precio|precio_fmt }}</div>
 
                 <div class="specs-grid">
                     {% if carro.anio %}<div class="spec"><div class="label">Año</div><div class="value">{{ carro.anio }}</div></div>{% endif %}
@@ -34,6 +35,10 @@
                     {% if carro.color %}<div class="spec"><div class="label">Color</div><div class="value">{{ carro.color }}</div></div>{% endif %}
                     {% if carro.categoria %}<div class="spec"><div class="label">Categoría</div><div class="value">{{ carro.get_categoria_display }}</div></div>{% endif %}
                     {% if carro.estado %}<div class="spec"><div class="label">Estado</div><div class="value">{{ carro.get_estado_display }}</div></div>{% endif %}
+                    <div class="spec"><div class="label">Publicado</div><div class="value">{{ carro.fecha_publicacion|date:"d/m/Y" }}</div></div>
+                    {% if carro.fecha_actualizacion != carro.fecha_publicacion %}
+                    <div class="spec"><div class="label">Actualizado</div><div class="value">{{ carro.fecha_actualizacion|date:"d/m/Y" }}</div></div>
+                    {% endif %}
                 </div>
 
                 {% if carro.etiquetas.all %}
@@ -62,7 +67,7 @@
                     <div class="calc-row">
                         <div>
                             <label>Cuota inicial ($)</label>
-                            <input type="number" id="calc-down" value="{{ carro.precio|floatformat:0 }}" oninput="calcular()">
+                            <input type="number" id="calc-down" value="{{ carro.precio|precio_fmt }}" oninput="calcular()">
                         </div>
                         <div>
                             <label>Plazo (meses)</label>
@@ -134,7 +139,7 @@
                     <small style="font-weight:700; color:var(--text-soft); text-transform:uppercase;">Tus ofertas previas:</small>
                     {% for o in mis_ofertas %}
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                        <strong>${{ o.monto|floatformat:0 }}</strong>
+                        <strong>${{ o.monto|precio_fmt }}</strong>
                         <span class="offer-status {{ o.estado }}">{{ o.get_estado_display }}</span>
                     </div>
                     {% endfor %}
@@ -153,7 +158,7 @@
             <div class="car-img">{% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}</div>
             <div class="car-body">
                 <h3>{{ c.marca }} {{ c.modelo }}</h3>
-                <div class="car-price">${{ c.precio|floatformat:0 }}</div>
+                <div class="car-price">${{ c.precio|precio_fmt }}</div>
             </div>
         </a>
         {% endfor %}

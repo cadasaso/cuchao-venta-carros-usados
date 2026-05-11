@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Dashboard - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -9,7 +10,7 @@
         <div class="stat-card"><div class="stat-value">{{ total_carros }}</div><div class="stat-label">Total publicados</div></div>
         <div class="stat-card"><div class="stat-value">{{ disponibles }}</div><div class="stat-label">Disponibles</div></div>
         <div class="stat-card"><div class="stat-value">{{ vendidos }}</div><div class="stat-label">Vendidos</div></div>
-        <div class="stat-card"><div class="stat-value">${{ ingresos|floatformat:0 }}</div><div class="stat-label">Ingresos totales</div></div>
+        <div class="stat-card"><div class="stat-value">${{ ingresos|precio_fmt }}</div><div class="stat-label">Ingresos totales</div></div>
         <div class="stat-card"><div class="stat-value">{{ total_vistas }}</div><div class="stat-label">Vistas en tus anuncios</div></div>
         <div class="stat-card"><div class="stat-value">{{ favoritos_recibidos }}</div><div class="stat-label">Favoritos recibidos</div></div>
         <div class="stat-card"><div class="stat-value">{{ ventas_recientes }}</div><div class="stat-label">Ventas últimos 30 días</div></div>
@@ -39,8 +40,12 @@
             </a>
             <div class="car-body">
                 <h3>{{ carro.marca }} {{ carro.modelo }}</h3>
-                <div class="car-price">${{ carro.precio|floatformat:0 }}</div>
+                <div class="car-price">${{ carro.precio|precio_fmt }}</div>
                 <div class="car-meta"><span>{{ carro.vistas }} vistas</span><span>{{ carro.total_favoritos }} favoritos</span></div>
+                <div class="car-meta" style="margin-top:0.25rem; font-size:0.75rem; color:var(--text-soft);">
+                    <span>Publicado: {{ carro.fecha_publicacion|date:"d/m/Y" }}</span>
+                    {% if carro.fecha_actualizacion != carro.fecha_publicacion %}<span>Editado: {{ carro.fecha_actualizacion|date:"d/m/Y" }}</span>{% endif %}
+                </div>
                 <div class="car-actions">
                     <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary">Editar</a>
                     <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex:1;" onsubmit="return confirm('¿Eliminar?');">
@@ -71,7 +76,7 @@
                     <td>{{ v.carro.modelo }}</td>
                     <td>{{ v.comprador.username }}</td>
                     <td>{{ v.get_metodo_pago_display }}</td>
-                    <td><strong>${{ v.precio_pagado|floatformat:0 }}</strong></td>
+                    <td><strong>${{ v.precio_pagado|precio_fmt }}</strong></td>
                     <td>{{ v.fecha_compra|date:"d/m/Y H:i" }}</td>
                 </tr>
             {% endfor %}

@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.db.models import Avg
+from decimal import Decimal
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
 
 class Usuario(AbstractUser):
@@ -82,7 +85,9 @@ class Carro(models.Model):
     ]
 
     propietario = models.ForeignKey(
-        Usuario, on_delete=models.CASCADE, null=True, blank=True
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name='carros_publicados',
     )
     modelo = models.CharField(max_length=100)
     marca = models.CharField(max_length=80, blank=True)
@@ -96,12 +101,18 @@ class Carro(models.Model):
     ciudad = models.CharField(max_length=80, blank=True)
     descripcion = models.TextField(blank=True)
     imagen = models.ImageField(upload_to='carros/', blank=True, null=True)
-    precio = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
+    precio = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0.01,
+        validators=[MinValueValidator(Decimal('0.01'))],
+    )
     precio_negociable = models.BooleanField(default=True, help_text="Permite recibir ofertas")
     vendido = models.BooleanField(default=False)
     destacado = models.BooleanField(default=False)
     vistas = models.PositiveIntegerField(default=0)
     fecha_publicacion = models.DateTimeField(default=timezone.now)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
     etiquetas = models.ManyToManyField(Etiqueta, blank=True, related_name='carros')
 
     class Meta:
@@ -177,13 +188,28 @@ class Compra(models.Model):
     ]
 
     comprador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='compras')
-    carro = models.ForeignKey(Carro, on_delete=models.CASCADE, related_name='ventas')
+    carro = models.ForeignKey(
+        Carro,
+        on_delete=models.PROTECT,
+        related_name='ventas',
+    )
     metodo_pago = models.CharField(max_length=20, choices=METODOS_PAGO, default='efectivo')
     precio_pagado = models.DecimalField(max_digits=12, decimal_places=2)
+    transaction_id = models.CharField(
+        max_length=60,
+        blank=True,
+        default='',
+        help_text='Referencia generada por el procesador de pago',
+    )
     fecha_compra = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-fecha_compra']
+
+    def clean(self):
+        if self.comprador_id and self.carro_id:
+            if self.comprador == self.carro.propietario:
+                raise ValidationError('No puedes comprar tu propio carro.')
 
     def __str__(self):
         return f"Compra de {self.comprador.username} - {self.carro.modelo}"

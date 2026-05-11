@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Comparar carros - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -27,7 +28,7 @@
         {% for c in carros %}<div class="cell"><strong>{{ c.marca }} {{ c.modelo }}</strong></div>{% endfor %}
 
         <div class="row-label">Precio</div>
-        {% for c in carros %}<div class="cell" style="color:var(--primary); font-size:1.2rem; font-weight:900;">${{ c.precio|floatformat:0 }}</div>{% endfor %}
+        {% for c in carros %}<div class="cell" style="color:var(--primary); font-size:1.2rem; font-weight:900;">${{ c.precio|precio_fmt }}</div>{% endfor %}
 
         <div class="row-label">Año</div>
         {% for c in carros %}<div class="cell">{{ c.anio|default:"—" }}</div>{% endfor %}
@@ -55,10 +56,8 @@
 
         <div class="row-label">Vendedor</div>
         {% for c in carros %}<div class="cell">
-            {% if c.propietario %}
-                {{ c.propietario.username }}{% if c.propietario.verificado %} (Verificado){% endif %}<br>
-                <small style="color:var(--text-soft);">{{ c.propietario.calificacion_promedio }}/5</small>
-            {% else %}—{% endif %}
+            <a href="{% url 'perfil_publico' c.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ c.propietario.username }}</a>{% if c.propietario.verificado %} <span class="badge-verified">Verificado</span>{% endif %}<br>
+            <small style="color:var(--text-soft);">{{ c.propietario.calificacion_promedio }}/5 · {{ c.propietario.total_ventas }} ventas</small>
         </div>{% endfor %}
 
         <div class="row-label">Vistas</div>

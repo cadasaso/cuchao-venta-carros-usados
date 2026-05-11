@@ -32,6 +32,7 @@ services:
       - "8000:8000"
     environment:
       DEBUG: '1'
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure-yx%8++#d7mrex*5jp7ziok-u)^_s3jx0r4d+@e-gzmi#l#d*2w}
       DB_NAME: cuchao_db
       DB_USER: cuchao_user
       DB_PASSWORD: Cuchao123

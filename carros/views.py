@@ -18,6 +18,7 @@ from .models import (
     Carro, Compra, Favorito, Resena, Mensaje, Usuario,
     Oferta, Notificacion, HistorialVista, Etiqueta
 )
+from .services import VentaService, CatalogoService
 
 
 # ----------------- AUTH -----------------
@@ -64,52 +65,23 @@ def logout_view(request):
 # ----------------- CATÁLOGO Y BÚSQUEDA -----------------
 def catalogo(request):
     """Catálogo con filtros y búsqueda avanzada."""
-    carros = Carro.objects.select_related('propietario').prefetch_related('etiquetas')
+    base_qs = Carro.objects.select_related('propietario').prefetch_related('etiquetas')
 
-    q = request.GET.get('q', '').strip()
-    marca = request.GET.get('marca', '').strip()
-    categoria = request.GET.get('categoria', '').strip()
-    transmision = request.GET.get('transmision', '').strip()
-    combustible = request.GET.get('combustible', '').strip()
-    precio_min = request.GET.get('precio_min', '').strip()
-    precio_max = request.GET.get('precio_max', '').strip()
-    anio_min = request.GET.get('anio_min', '').strip()
-    etiqueta = request.GET.get('etiqueta', '').strip()
-    solo_disponibles = request.GET.get('disponibles', '')
-    orden = request.GET.get('orden', 'recientes')
+    filtros = {
+        'q':           request.GET.get('q', ''),
+        'marca':       request.GET.get('marca', ''),
+        'categoria':   request.GET.get('categoria', ''),
+        'transmision': request.GET.get('transmision', ''),
+        'combustible': request.GET.get('combustible', ''),
+        'precio_min':  request.GET.get('precio_min', ''),
+        'precio_max':  request.GET.get('precio_max', ''),
+        'anio_min':    request.GET.get('anio_min', ''),
+        'etiqueta':    request.GET.get('etiqueta', ''),
+        'disponibles': request.GET.get('disponibles', ''),
+        'orden':       request.GET.get('orden', 'recientes'),
+    }
 
-    if q:
-        carros = carros.filter(
-            Q(modelo__icontains=q) | Q(marca__icontains=q) |
-            Q(descripcion__icontains=q) | Q(ciudad__icontains=q)
-        )
-    if marca:
-        carros = carros.filter(marca__icontains=marca)
-    if categoria:
-        carros = carros.filter(categoria=categoria)
-    if transmision:
-        carros = carros.filter(transmision=transmision)
-    if combustible:
-        carros = carros.filter(combustible=combustible)
-    if precio_min.isdigit():
-        carros = carros.filter(precio__gte=int(precio_min))
-    if precio_max.isdigit():
-        carros = carros.filter(precio__lte=int(precio_max))
-    if anio_min.isdigit():
-        carros = carros.filter(anio__gte=int(anio_min))
-    if etiqueta.isdigit():
-        carros = carros.filter(etiquetas__id=int(etiqueta))
-    if solo_disponibles == '1':
-        carros = carros.filter(vendido=False)
-
-    if orden == 'precio_asc':
-        carros = carros.order_by('precio')
-    elif orden == 'precio_desc':
-        carros = carros.order_by('-precio')
-    elif orden == 'populares':
-        carros = carros.order_by('-vistas')
-    else:
-        carros = carros.order_by('-fecha_publicacion')
+    carros = CatalogoService.filtrar_carros(base_qs, filtros)
 
     favoritos_ids = set()
     if request.user.is_authenticated:
@@ -134,13 +106,7 @@ def catalogo(request):
         'favoritos_ids': favoritos_ids,
         'recientes': recientes,
         'todas_etiquetas': Etiqueta.objects.all(),
-        'filtros': {
-            'q': q, 'marca': marca, 'categoria': categoria,
-            'transmision': transmision, 'combustible': combustible,
-            'precio_min': precio_min, 'precio_max': precio_max,
-            'anio_min': anio_min, 'orden': orden, 'etiqueta': etiqueta,
-            'disponibles': solo_disponibles,
-        },
+        'filtros': filtros,
         'categorias': Carro.CATEGORIAS,
         'transmisiones': Carro.TRANSMISIONES,
         'combustibles': Carro.COMBUSTIBLES,
@@ -216,11 +182,19 @@ def editar_carro(request, carro_id):
 @login_required(login_url='login')
 @require_http_methods(["POST"])
 def eliminar_carro(request, carro_id):
+    from django.db import ProtectedError
     carro = get_object_or_404(Carro, id=carro_id)
     if carro.propietario != request.user:
         return HttpResponseForbidden('No tienes permiso para eliminar este carro')
-    carro.delete()
-    messages.success(request, 'Carro eliminado.')
+    try:
+        carro.delete()
+        messages.success(request, 'Carro eliminado.')
+    except ProtectedError:
+        messages.error(
+            request,
+            'No se puede eliminar este carro porque tiene compras registradas. '
+            'El historial de compra se conserva por integridad del sistema.'
+        )
     return redirect('catalogo')
 
 
@@ -232,6 +206,9 @@ def confirmar_compra(request, carro_id):
     if carro.vendido:
         messages.error(request, 'Este carro ya ha sido vendido.')
         return redirect('catalogo')
+    if carro.propietario == request.user:
+        messages.error(request, 'No puedes comprar tu propio carro.')
+        return redirect('detalle_carro', carro_id=carro_id)
     return render(request, 'confirmar_compra.html', {
         'carro': carro,
         'metodos_pago': Compra.METODOS_PAGO,
@@ -241,32 +218,19 @@ def confirmar_compra(request, carro_id):
 @login_required(login_url='login')
 @require_http_methods(["POST"])
 def procesar_compra(request, carro_id):
-    carro = get_object_or_404(Carro, id=carro_id)
-    if carro.vendido:
-        messages.error(request, 'Este carro ya ha sido vendido.')
-        return redirect('catalogo')
+    from django.core.exceptions import ValidationError as DjangoValidationError
     metodo_pago = request.POST.get('metodo_pago', 'efectivo')
-    if metodo_pago not in dict(Compra.METODOS_PAGO):
-        messages.error(request, 'Método de pago inválido.')
+    try:
+        compra = VentaService.procesar_compra(carro_id, request.user, metodo_pago)
+    except Carro.DoesNotExist:
+        messages.error(request, 'El carro no existe.')
+        return redirect('catalogo')
+    except (ValueError, DjangoValidationError) as e:
+        # ValueError viene del servicio; ValidationError viene del modelo (clean)
+        msg = e.message if hasattr(e, 'message') else str(e)
+        messages.error(request, msg)
         return redirect('confirmar_compra', carro_id=carro_id)
-    compra = Compra.objects.create(
-        comprador=request.user, carro=carro,
-        metodo_pago=metodo_pago, precio_pagado=carro.precio
-    )
-    carro.vendido = True
-    carro.save()
-    # Notificaciones
-    Notificacion.crear(
-        carro.propietario, 'venta', f'Vendiste tu {carro.modelo}',
-        f'{request.user.username} compró tu carro por ${carro.precio:,.0f}.',
-        f'/dashboard/', ''
-    )
-    Notificacion.crear(
-        request.user, 'compra', f'Compra exitosa: {carro.modelo}',
-        'Revisa los detalles en "Mis compras".',
-        f'/mis-compras/', ''
-    )
-    messages.success(request, f'¡Compra realizada! Adquiriste {carro.modelo}.')
+    messages.success(request, f'¡Compra realizada! Adquiriste {compra.carro.modelo}.')
     return redirect('compra_exitosa', compra_id=compra.id)
 
 
@@ -296,7 +260,7 @@ def toggle_favorito(request, carro_id):
         accion = 'removido'
     else:
         accion = 'agregado'
-        if carro.propietario and carro.propietario != request.user:
+        if carro.propietario != request.user:
             Notificacion.crear(
                 carro.propietario, 'favorito',
                 f'A {request.user.username} le encantó tu {carro.modelo}',
@@ -429,7 +393,7 @@ def crear_resena(request, username):
 @require_http_methods(["POST"])
 def enviar_mensaje(request, carro_id):
     carro = get_object_or_404(Carro, id=carro_id)
-    if not carro.propietario or carro.propietario == request.user:
+    if carro.propietario == request.user:
         messages.error(request, 'No puedes enviarte mensajes a ti mismo.')
         return redirect('detalle_carro', carro_id=carro_id)
     form = MensajeForm(request.POST)

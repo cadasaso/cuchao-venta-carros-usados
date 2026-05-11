@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 
 {% block title %}Catálogo - Cuchao{% endblock %}
 
@@ -30,7 +31,7 @@
             <div class="car-img">{% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}</div>
             <div class="car-body">
                 <h3 style="font-size:0.95rem;">{{ c.marca }} {{ c.modelo }}</h3>
-                <div class="car-price" style="font-size:1.1rem;">${{ c.precio|floatformat:0 }}</div>
+                <div class="car-price" style="font-size:1.1rem;">${{ c.precio|precio_fmt }}</div>
             </div>
         </a>
         {% endfor %}
@@ -53,7 +54,7 @@
                     {% if carro.anio %}<span>{{ carro.anio }}</span>{% endif %}
                     {% if carro.kilometraje %}<span>{{ carro.kilometraje }} km</span>{% endif %}
                 </div>
-                <div class="car-price">${{ carro.precio|floatformat:0 }}</div>
+                <div class="car-price">${{ carro.precio|precio_fmt }}</div>
             </div>
         </a>
         {% endfor %}
@@ -167,7 +168,7 @@
                             {% for t in carro.etiquetas.all %}<span class="tag-chip">{{ t.nombre }}</span>{% endfor %}
                         </div>
                         {% endif %}
-                        <div class="car-price">${{ carro.precio|floatformat:0 }}{% if carro.precio_negociable %} <small style="font-size:0.7rem; color:var(--success); font-weight:600;">· Negociable</small>{% endif %}</div>
+                        <div class="car-price">${{ carro.precio|precio_fmt }}{% if carro.precio_negociable %} <small style="font-size:0.7rem; color:var(--success); font-weight:600;">· Negociable</small>{% endif %}</div>
                         <div class="car-seller">Por <a href="{% url 'perfil_publico' carro.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ carro.propietario.username }}</a>{% if carro.propietario.verificado %} <span class="badge-verified">Verificado</span>{% endif %}</div>
                         <div class="car-actions">
                             <a href="{% url 'detalle_carro' carro.id %}" class="btn btn-ghost">Ver detalle</a>

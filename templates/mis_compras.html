@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Mis compras - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -13,7 +14,7 @@
                     <td><a href="{% url 'detalle_carro' c.carro.id %}" style="color:var(--primary); font-weight:600;">{{ c.carro.marca }} {{ c.carro.modelo }}</a></td>
                     <td>{{ c.carro.propietario.username }}</td>
                     <td>{{ c.get_metodo_pago_display }}</td>
-                    <td><strong>${{ c.precio_pagado|floatformat:0 }}</strong></td>
+                    <td><strong>${{ c.precio_pagado|precio_fmt }}</strong></td>
                     <td>{{ c.fecha_compra|date:"d/m/Y" }}</td>
                 </tr>
             {% empty %}

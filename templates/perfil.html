@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}{{ vendedor.username }} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -27,7 +28,7 @@
             <div class="car-img">{% if carro.imagen %}<img src="{{ carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}{% if carro.vendido %}<span class="badge-vendido">Vendido</span>{% endif %}</div>
             <div class="car-body">
                 <h3>{{ carro.marca }} {{ carro.modelo }}</h3>
-                <div class="car-price">${{ carro.precio|floatformat:0 }}</div>
+                <div class="car-price">${{ carro.precio|precio_fmt }}</div>
             </div>
         </a>
         {% empty %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Mis ofertas - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -21,8 +22,8 @@
                 <span class="offer-status {{ o.estado }}">{{ o.get_estado_display }}</span>
             </div>
             <div style="display:flex; align-items:baseline; gap:1rem; margin-top:0.6rem;">
-                <div class="offer-amount">${{ o.monto|floatformat:0 }}</div>
-                <small style="color:var(--text-soft);">precio listado: <s>${{ o.carro.precio|floatformat:0 }}</s> ({{ o.porcentaje_descuento }}% menos)</small>
+                <div class="offer-amount">${{ o.monto|precio_fmt }}</div>
+                <small style="color:var(--text-soft);">precio listado: <s>${{ o.carro.precio|precio_fmt }}</s> ({{ o.porcentaje_descuento }}% menos)</small>
             </div>
             {% if o.mensaje %}<p style="margin-top:0.6rem; padding:0.7rem; background:var(--surface-2); border-radius:8px; font-size:0.88rem;">"{{ o.mensaje }}"</p>{% endif %}
             {% if o.estado == 'pendiente' %}
@@ -45,7 +46,7 @@
                 </form>
             </div>
             {% elif o.estado == 'contraoferta' %}
-            <p style="margin-top:0.8rem; color:var(--primary); font-weight:700;">Tu contraoferta: ${{ o.contraoferta_monto|floatformat:0 }}</p>
+            <p style="margin-top:0.8rem; color:var(--primary); font-weight:700;">Tu contraoferta: ${{ o.contraoferta_monto|precio_fmt }}</p>
             {% endif %}
         </div>
         {% empty %}
@@ -63,9 +64,9 @@
                 </div>
                 <span class="offer-status {{ o.estado }}">{{ o.get_estado_display }}</span>
             </div>
-            <div class="offer-amount">${{ o.monto|floatformat:0 }}</div>
+            <div class="offer-amount">${{ o.monto|precio_fmt }}</div>
             {% if o.contraoferta_monto %}
-            <p style="margin-top:0.5rem; color:var(--primary); font-weight:700;">Contraoferta del vendedor: ${{ o.contraoferta_monto|floatformat:0 }}</p>
+            <p style="margin-top:0.5rem; color:var(--primary); font-weight:700;">Contraoferta del vendedor: ${{ o.contraoferta_monto|precio_fmt }}</p>
             {% endif %}
         </div>
         {% empty %}

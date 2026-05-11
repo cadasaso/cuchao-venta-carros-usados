@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Historial - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
@@ -13,7 +14,7 @@
             </a>
             <div class="car-body">
                 <h3>{{ h.carro.marca }} {{ h.carro.modelo }}</h3>
-                <div class="car-price">${{ h.carro.precio|floatformat:0 }}</div>
+                <div class="car-price">${{ h.carro.precio|precio_fmt }}</div>
                 <small style="color:var(--muted);">Visto {{ h.fecha|timesince }} atrás</small>
             </div>
         </div>

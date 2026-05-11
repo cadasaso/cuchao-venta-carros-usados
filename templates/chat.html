@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Chat con {{ otro.username }} - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow" style="padding-top:1.5rem; padding-bottom:0;">
@@ -13,7 +14,7 @@
                     {% if otro.verificado %}<span class="badge-verified">Verificado</span>{% endif %}
                 </div>
                 <a href="{% url 'detalle_carro' carro.id %}" class="chat-header-car">
-                    {{ carro.marca }} {{ carro.modelo }}{% if carro.anio %} &middot; {{ carro.anio }}{% endif %} &mdash; ${{ carro.precio|floatformat:0 }}
+                    {{ carro.marca }} {{ carro.modelo }}{% if carro.anio %} &middot; {{ carro.anio }}{% endif %} &mdash; ${{ carro.precio|precio_fmt }}
                 </a>
             </div>
         </div>

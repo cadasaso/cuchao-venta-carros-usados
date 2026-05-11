@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cuchao_filters %}
 {% block title %}Confirmar compra - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow">
@@ -17,7 +18,7 @@
         <p style="color:var(--text-soft); margin-bottom:1rem;">{{ carro.descripcion }}</p>
         <div class="flex-between" style="padding-top:1rem; border-top:1px solid var(--border);">
             <span style="color:var(--text-soft);">Vendedor: <strong>{{ carro.propietario.username }}</strong></span>
-            <span style="font-size:1.8rem; font-weight:900; color:var(--primary-dark);">${{ carro.precio|floatformat:0 }}</span>
+            <span style="font-size:1.8rem; font-weight:900; color:var(--primary-dark);">${{ carro.precio|precio_fmt }}</span>
         </div>
     </div>
 
