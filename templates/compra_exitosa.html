@@ -1,46 +1,46 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}¡Compra exitosa! - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "Purchase successful!" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow">
     <div class="form-card text-center" style="max-width:none;">
         <div style="width:90px; height:90px; background:linear-gradient(135deg,#10b981,#059669); border-radius:50%; margin:0 auto 1.2rem; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:900; color:white; box-shadow:0 12px 30px rgba(16,185,129,.4);">OK</div>
-        <h1 style="color:var(--success); font-size:2rem; margin-bottom:0.4rem;">¡Compra realizada!</h1>
-        <p class="subtitle">Tu transacción se procesó correctamente</p>
+        <h1 style="color:var(--success); font-size:2rem; margin-bottom:0.4rem;">{% trans "Purchase completed!" %}</h1>
+        <p class="subtitle">{% trans "Your transaction was processed successfully" %}</p>
 
         <div style="background:var(--surface-2); padding:1.5rem; border-radius:12px; text-align:left; margin-bottom:1.5rem;">
             <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                <span style="color:var(--text-soft); font-weight:600;">Producto</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Product" %}</span>
                 <strong>{{ compra.carro.marca }} {{ compra.carro.modelo }}</strong>
             </div>
             <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                <span style="color:var(--text-soft); font-weight:600;">Precio</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Price" %}</span>
                 <strong style="color:var(--success); font-size:1.2rem;">${{ compra.precio_pagado|precio_fmt }}</strong>
             </div>
             <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                <span style="color:var(--text-soft); font-weight:600;">Método</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Method" %}</span>
                 <strong>{{ compra.get_metodo_pago_display }}</strong>
             </div>
             <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                <span style="color:var(--text-soft); font-weight:600;">Fecha</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Date" %}</span>
                 <strong>{{ compra.fecha_compra|date:"d/m/Y H:i" }}</strong>
             </div>
             <div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid var(--border);">
-                <span style="color:var(--text-soft); font-weight:600;">ID compra</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Purchase ID" %}</span>
                 <strong>#CCH-{{ compra.id }}</strong>
             </div>
             {% if compra.transaction_id %}
             <div class="flex-between" style="padding:0.5rem 0;">
-                <span style="color:var(--text-soft); font-weight:600;">Ref. pago</span>
+                <span style="color:var(--text-soft); font-weight:600;">{% trans "Payment ref." %}</span>
                 <strong style="font-family:monospace; color:var(--primary);">{{ compra.transaction_id }}</strong>
             </div>
             {% endif %}
         </div>
 
-        <div class="flash warning">Compra simulada para demostración.</div>
+        <div class="flash warning">{% trans "Simulated purchase for demonstration." %}</div>
         <div class="flex" style="margin-top:1.2rem;">
-            <a href="{% url 'catalogo' %}" class="btn btn-ghost" style="padding:0.95rem;">Volver al catálogo</a>
-            <a href="{% url 'mis_compras' %}" class="btn btn-primary" style="padding:0.95rem;">Mis compras</a>
+            <a href="{% url 'catalogo' %}" class="btn btn-ghost" style="padding:0.95rem;">{% trans "Back to catalog" %}</a>
+            <a href="{% url 'mis_compras' %}" class="btn btn-primary" style="padding:0.95rem;">{% trans "My purchases" %}</a>
         </div>
     </div>
 </div>

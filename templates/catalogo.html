@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
+{% load i18n cuchao_filters %}
 
-{% block title %}Catálogo - Cuchao{% endblock %}
+{% block title %}{% trans "Catalog" %} - Cuchao{% endblock %}
 
 {% block content %}
 <section class="hero">
     <div class="hero-inner">
-        <h1>Encuentra tu próximo <span>carro perfecto</span></h1>
-        <p>Miles de carros usados verificados, vendidos directamente por sus propietarios. Compra fácil, rápido y seguro.</p>
+        <h1>{% trans "Find your next" %} <span>{% trans "perfect car" %}</span></h1>
+        <p>{% trans "Thousands of verified used cars, sold directly by their owners. Easy, fast and secure." %}</p>
         <form class="hero-search" method="get" action="{% url 'catalogo' %}" autocomplete="off">
-            <input type="text" name="q" id="live-search" placeholder="Busca por marca, modelo o ciudad..." value="{{ filtros.q }}" oninput="liveSearch(this.value)">
-            <button type="submit">Buscar</button>
+            <input type="text" name="q" id="live-search" placeholder="{% trans "Search by brand, model or city..." %}" value="{{ filtros.q }}" oninput="liveSearch(this.value)">
+            <button type="submit">{% trans "Search" %}</button>
             <div class="search-results-pop" id="live-results"></div>
         </form>
         <div class="hero-stats">
-            <div class="hero-stat"><strong>{{ total_resultados }}</strong><span>Carros disponibles</span></div>
-            <div class="hero-stat"><strong>100%</strong><span>Verificados</span></div>
-            <div class="hero-stat"><strong>24/7</strong><span>Atención</span></div>
+            <div class="hero-stat"><strong>{{ total_resultados }}</strong><span>{% trans "Available cars" %}</span></div>
+            <div class="hero-stat"><strong>100%</strong><span>{% trans "Verified" %}</span></div>
+            <div class="hero-stat"><strong>24/7</strong><span>{% trans "Support" %}</span></div>
         </div>
     </div>
 </section>
@@ -24,7 +24,7 @@
 <div class="container">
 
     {% if recientes %}
-    <h2 class="section-title">Continúa viendo</h2>
+    <h2 class="section-title">{% trans "Continue watching" %}</h2>
     <div class="recientes-strip">
         {% for c in recientes %}
         <a href="{% url 'detalle_carro' c.id %}" class="car-card">
@@ -39,14 +39,14 @@
     {% endif %}
 
     {% if destacados %}
-    <h2 class="section-title">Carros destacados</h2>
+    <h2 class="section-title">{% trans "Featured cars" %}</h2>
     <div class="catalog-grid mb-3">
         {% for carro in destacados %}
         <a href="{% url 'detalle_carro' carro.id %}" class="car-card">
             <div class="car-img">
                 {% if carro.imagen %}<img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}">
                 {% else %}<div class="car-img-placeholder"></div>{% endif %}
-                <span class="badge-destacado">Destacado</span>
+                <span class="badge-destacado">{% trans "Featured" %}</span>
             </div>
             <div class="car-body">
                 <h3>{{ carro.marca }} {{ carro.modelo }}</h3>
@@ -63,76 +63,76 @@
 
     <div class="catalog-layout">
         <aside class="filter-card">
-            <h3>Filtros</h3>
+            <h3>{% trans "Filters" %}</h3>
             <form method="get" action="{% url 'catalogo' %}">
                 <div class="filter-group">
-                    <label>Buscar</label>
-                    <input type="text" name="q" value="{{ filtros.q }}" placeholder="Modelo, marca...">
+                    <label>{% trans "Search" %}</label>
+                    <input type="text" name="q" value="{{ filtros.q }}" placeholder="{% trans "Model, brand..." %}">
                 </div>
                 <div class="filter-group">
-                    <label>Marca</label>
+                    <label>{% trans "Brand" %}</label>
                     <input type="text" name="marca" value="{{ filtros.marca }}" placeholder="Toyota, Mazda...">
                 </div>
                 <div class="filter-group">
-                    <label>Categoría</label>
+                    <label>{% trans "Category" %}</label>
                     <select name="categoria">
-                        <option value="">Todas</option>
+                        <option value="">{% trans "All" %}</option>
                         {% for k, v in categorias %}
                         <option value="{{ k }}" {% if filtros.categoria == k %}selected{% endif %}>{{ v }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Transmisión</label>
+                    <label>{% trans "Transmission" %}</label>
                     <select name="transmision">
-                        <option value="">Todas</option>
+                        <option value="">{% trans "All" %}</option>
                         {% for k, v in transmisiones %}
                         <option value="{{ k }}" {% if filtros.transmision == k %}selected{% endif %}>{{ v }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Combustible</label>
+                    <label>{% trans "Fuel" %}</label>
                     <select name="combustible">
-                        <option value="">Todos</option>
+                        <option value="">{% trans "All" %}</option>
                         {% for k, v in combustibles %}
                         <option value="{{ k }}" {% if filtros.combustible == k %}selected{% endif %}>{{ v }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Precio</label>
+                    <label>{% trans "Price" %}</label>
                     <div class="filter-row">
                         <input type="number" name="precio_min" value="{{ filtros.precio_min }}" placeholder="Min">
                         <input type="number" name="precio_max" value="{{ filtros.precio_max }}" placeholder="Max">
                     </div>
                 </div>
                 <div class="filter-group">
-                    <label>Año desde</label>
+                    <label>{% trans "Year from" %}</label>
                     <input type="number" name="anio_min" value="{{ filtros.anio_min }}" placeholder="2015">
                 </div>
                 <div class="filter-group">
                     <label style="display:flex; align-items:center; gap:0.4rem; text-transform:none;">
                         <input type="checkbox" name="disponibles" value="1" {% if filtros.disponibles == '1' %}checked{% endif %} style="width:auto;">
-                        Solo disponibles
+                        {% trans "Available only" %}
                     </label>
                 </div>
-                <button type="submit" class="btn-filter">Aplicar filtros</button>
-                <a href="{% url 'catalogo' %}" class="btn-clear" style="display:block; text-decoration:none; text-align:center;">Limpiar</a>
+                <button type="submit" class="btn-filter">{% trans "Apply filters" %}</button>
+                <a href="{% url 'catalogo' %}" class="btn-clear" style="display:block; text-decoration:none; text-align:center;">{% trans "Clear" %}</a>
             </form>
         </aside>
 
         <div>
             <div class="results-bar">
-                <div class="results-count"><strong>{{ total_resultados }}</strong> resultados</div>
+                <div class="results-count"><strong>{{ total_resultados }}</strong> {% trans "results" %}</div>
                 <form method="get" style="display:flex; gap:0.5rem; align-items:center;">
                     {% for k, v in filtros.items %}{% if v and k != 'orden' %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endif %}{% endfor %}
-                    <label style="font-size:0.85rem; color:var(--text-soft); font-weight:600;">Ordenar:</label>
+                    <label style="font-size:0.85rem; color:var(--text-soft); font-weight:600;">{% trans "Sort:" %}</label>
                     <select name="orden" onchange="this.form.submit()" style="padding:0.5rem 0.7rem; border-radius:8px; border:1px solid var(--border); background:white;">
-                        <option value="recientes" {% if filtros.orden == 'recientes' %}selected{% endif %}>Más recientes</option>
-                        <option value="precio_asc" {% if filtros.orden == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
-                        <option value="precio_desc" {% if filtros.orden == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
-                        <option value="populares" {% if filtros.orden == 'populares' %}selected{% endif %}>Más populares</option>
+                        <option value="recientes" {% if filtros.orden == 'recientes' %}selected{% endif %}>{% trans "Most recent" %}</option>
+                        <option value="precio_asc" {% if filtros.orden == 'precio_asc' %}selected{% endif %}>{% trans "Price: low to high" %}</option>
+                        <option value="precio_desc" {% if filtros.orden == 'precio_desc' %}selected{% endif %}>{% trans "Price: high to low" %}</option>
+                        <option value="populares" {% if filtros.orden == 'populares' %}selected{% endif %}>{% trans "Most popular" %}</option>
                     </select>
                 </form>
             </div>
@@ -143,14 +143,14 @@
                     <a href="{% url 'detalle_carro' carro.id %}" class="car-img">
                         {% if carro.imagen %}<img src="{{ carro.imagen.url }}" alt="{{ carro.modelo }}">
                         {% else %}<div class="car-img-placeholder"></div>{% endif %}
-                        {% if carro.vendido %}<span class="badge-vendido">Vendido</span>
-                        {% else %}<span class="badge-disponible">Disponible</span>{% endif %}
+                        {% if carro.vendido %}<span class="badge-vendido">{% trans "Sold" %}</span>
+                        {% else %}<span class="badge-disponible">{% trans "Available" %}</span>{% endif %}
                     </a>
-                    <button class="btn-add-compare" data-car-id="{{ carro.id }}" onclick="toggleCompareCar({{ carro.id }}, '{{ carro.marca }} {{ carro.modelo|escapejs }}', '{% if carro.imagen %}{{ carro.imagen.url }}{% endif %}', this)" title="Comparar">Comp</button>
+                    <button class="btn-add-compare" data-car-id="{{ carro.id }}" onclick="toggleCompareCar({{ carro.id }}, '{{ carro.marca }} {{ carro.modelo|escapejs }}', '{% if carro.imagen %}{{ carro.imagen.url }}{% endif %}', this)" title="{% trans "Compare" %}">Comp</button>
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'toggle_favorito' carro.id %}" style="position:absolute; top:0.8rem; right:0.8rem;">
                         {% csrf_token %}
-                        <button type="submit" class="fav-btn {% if carro.id in favoritos_ids %}active{% endif %}" title="{% if carro.id in favoritos_ids %}Quitar de favoritos{% else %}Guardar{% endif %}">
+                        <button type="submit" class="fav-btn {% if carro.id in favoritos_ids %}active{% endif %}" title="{% if carro.id in favoritos_ids %}{% trans "Remove from favorites" %}{% else %}{% trans "Save" %}{% endif %}">
                             {% if carro.id in favoritos_ids %}♥{% else %}♡{% endif %}
                         </button>
                     </form>
@@ -168,17 +168,17 @@
                             {% for t in carro.etiquetas.all %}<span class="tag-chip">{{ t.nombre }}</span>{% endfor %}
                         </div>
                         {% endif %}
-                        <div class="car-price">${{ carro.precio|precio_fmt }}{% if carro.precio_negociable %} <small style="font-size:0.7rem; color:var(--success); font-weight:600;">· Negociable</small>{% endif %}</div>
-                        <div class="car-seller">Por <a href="{% url 'perfil_publico' carro.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ carro.propietario.username }}</a>{% if carro.propietario.verificado %} <span class="badge-verified">Verificado</span>{% endif %}</div>
+                        <div class="car-price">${{ carro.precio|precio_fmt }}{% if carro.precio_negociable %} <small style="font-size:0.7rem; color:var(--success); font-weight:600;">· {% trans "Negotiable" %}</small>{% endif %}</div>
+                        <div class="car-seller">{% trans "By" %} <a href="{% url 'perfil_publico' carro.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ carro.propietario.username }}</a>{% if carro.propietario.verificado %} <span class="badge-verified">{% trans "Verified" %}</span>{% endif %}</div>
                         <div class="car-actions">
-                            <a href="{% url 'detalle_carro' carro.id %}" class="btn btn-ghost">Ver detalle</a>
+                            <a href="{% url 'detalle_carro' carro.id %}" class="btn btn-ghost">{% trans "View details" %}</a>
                             {% if user.is_authenticated and not carro.vendido and carro.propietario != user %}
-                                <a href="{% url 'confirmar_compra' carro.id %}" class="btn btn-success">Comprar</a>
+                                <a href="{% url 'confirmar_compra' carro.id %}" class="btn btn-success">{% trans "Buy" %}</a>
                             {% elif user.is_authenticated and carro.propietario == user %}
-                                <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary">Editar</a>
-                                <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex:1; min-width:90px;" onsubmit="return confirm('¿Eliminar este carro?');">
+                                <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary">{% trans "Edit" %}</a>
+                                <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex:1; min-width:90px;" onsubmit="return confirm('{% trans "Delete this car?" %}');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger" style="width:100%;">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger" style="width:100%;">{% trans "Delete" %}</button>
                                 </form>
                             {% endif %}
                         </div>
@@ -187,8 +187,8 @@
                 {% empty %}
                 <div class="empty-state" style="grid-column: 1/-1;">
                     <div class="icon"></div>
-                    <h3>No se encontraron carros</h3>
-                    <p>Intenta cambiar los filtros de búsqueda</p>
+                    <h3>{% trans "No cars found" %}</h3>
+                    <p>{% trans "Try changing the search filters" %}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -209,7 +209,7 @@ function liveSearch(q) {
             .then(r => r.json())
             .then(d => {
                 if (!d.results.length) {
-                    pop.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--muted);">Sin resultados</div>';
+                    pop.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--muted);">{% trans "No results" %}</div>';
                 } else {
                     pop.innerHTML = d.results.map(c => `
                         <a href="${c.url}" class="search-result-item">

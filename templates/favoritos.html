@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Mis favoritos - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "My favorites" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="section-title">Mis favoritos</h1>
-    <p class="section-subtitle">Carros que has guardado para ver más tarde</p>
+    <h1 class="section-title">{% trans "My favorites" %}</h1>
+    <p class="section-subtitle">{% trans "Cars you saved to view later" %}</p>
 
     <div class="catalog-grid">
         {% for fav in favoritos %}
         <div class="car-card">
             <a href="{% url 'detalle_carro' fav.carro.id %}" class="car-img">
                 {% if fav.carro.imagen %}<img src="{{ fav.carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}
-                {% if fav.carro.vendido %}<span class="badge-vendido">Vendido</span>{% else %}<span class="badge-disponible">Disponible</span>{% endif %}
+                {% if fav.carro.vendido %}<span class="badge-vendido">{% trans "Sold" %}</span>{% else %}<span class="badge-disponible">{% trans "Available" %}</span>{% endif %}
             </a>
             <div class="car-body">
                 <h3>{{ fav.carro.marca }} {{ fav.carro.modelo }}</h3>
                 <div class="car-price">${{ fav.carro.precio|precio_fmt }}</div>
                 <div class="car-actions">
-                    <a href="{% url 'detalle_carro' fav.carro.id %}" class="btn btn-primary">Ver</a>
+                    <a href="{% url 'detalle_carro' fav.carro.id %}" class="btn btn-primary">{% trans "View" %}</a>
                     <form method="post" action="{% url 'toggle_favorito' fav.carro.id %}" style="flex:1;">
                         {% csrf_token %}
-                        <button class="btn btn-ghost" type="submit" style="width:100%;">Quitar</button>
+                        <button class="btn btn-ghost" type="submit" style="width:100%;">{% trans "Remove" %}</button>
                     </form>
                 </div>
             </div>
@@ -28,8 +28,8 @@
         {% empty %}
         <div class="empty-state" style="grid-column:1/-1;">
             <div class="icon"></div>
-            <h3>No tienes favoritos aún</h3>
-            <p>Explora el catálogo y guarda los carros que te interesen</p>
+            <h3>{% trans "No favorites yet" %}</h3>
+            <p>{% trans "Explore the catalog and save the cars you're interested in" %}</p>
         </div>
         {% endfor %}
     </div>

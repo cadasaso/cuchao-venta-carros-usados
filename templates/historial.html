@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Historial - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "History" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="section-title">Historial de visitas</h1>
-    <p class="section-subtitle">Carros que has visto recientemente</p>
+    <h1 class="section-title">{% trans "Browsing history" %}</h1>
+    <p class="section-subtitle">{% trans "Cars you've viewed recently" %}</p>
 
     <div class="catalog-grid">
         {% for h in items %}
@@ -15,13 +15,13 @@
             <div class="car-body">
                 <h3>{{ h.carro.marca }} {{ h.carro.modelo }}</h3>
                 <div class="car-price">${{ h.carro.precio|precio_fmt }}</div>
-                <small style="color:var(--muted);">Visto {{ h.fecha|timesince }} atrás</small>
+                <small style="color:var(--muted);">{% trans "Viewed" %} {{ h.fecha|timesince }} {% trans "ago" %}</small>
             </div>
         </div>
         {% empty %}
         <div class="empty-state" style="grid-column:1/-1;">
             <div class="icon"></div>
-            <h3>Aún no has visto ningún carro</h3>
+            <h3>{% trans "You haven't viewed any cars yet" %}</h3>
         </div>
         {% endfor %}
     </div>

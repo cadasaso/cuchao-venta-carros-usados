@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Mensajes - Cuchao{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Messages" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow">
-    <h1 class="section-title">Mensajes</h1>
+    <h1 class="section-title">{% trans "Messages" %}</h1>
     <div class="conv-list">
         {% for conv in conversaciones %}
         <a href="{% url 'chat' conv.carro.id conv.otro.username %}" class="conv-item {% if conv.no_leidos %}conv-item--unread{% endif %}">
@@ -13,7 +14,7 @@
                     <span class="conv-time">{{ conv.ultimo.fecha|date:"d/m H:i" }}</span>
                 </div>
                 <div class="conv-car">{{ conv.carro.marca }} {{ conv.carro.modelo }}{% if conv.carro.anio %} · {{ conv.carro.anio }}{% endif %}</div>
-                <div class="conv-preview">{% if conv.ultimo.remitente == user %}Tú: {% endif %}{{ conv.ultimo.contenido|truncatechars:65 }}</div>
+                <div class="conv-preview">{% if conv.ultimo.remitente == user %}{% trans "You:" %} {% endif %}{{ conv.ultimo.contenido|truncatechars:65 }}</div>
             </div>
             {% if conv.no_leidos %}
             <span class="conv-badge">{{ conv.no_leidos }}</span>
@@ -21,9 +22,9 @@
         </a>
         {% empty %}
         <div class="empty-state">
-            <h3>Sin conversaciones</h3>
-            <p>Cuando contactes a un vendedor, la conversación aparecerá aquí.</p>
-            <a href="{% url 'catalogo' %}" class="btn btn-primary" style="display:inline-flex; margin-top:1rem;">Explorar carros</a>
+            <h3>{% trans "No conversations" %}</h3>
+            <p>{% trans "When you contact a seller, the conversation will appear here." %}</p>
+            <a href="{% url 'catalogo' %}" class="btn btn-primary" style="display:inline-flex; margin-top:1rem;">{% trans "Explore cars" %}</a>
         </div>
         {% endfor %}
     </div>

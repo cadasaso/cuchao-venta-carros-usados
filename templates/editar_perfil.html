@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Editar perfil - Cuchao{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Edit profile" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="form-card">
-    <h1>Editar perfil</h1>
-    <p class="subtitle">Actualiza tu información pública</p>
+    <h1>{% trans "Edit profile" %}</h1>
+    <p class="subtitle">{% trans "Update your public information" %}</p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-grid">
-            <div><label>Nombre</label><input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}"></div>
-            <div><label>Apellido</label><input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}"></div>
+            <div><label>{% trans "First name" %}</label><input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}"></div>
+            <div><label>{% trans "Last name" %}</label><input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}"></div>
         </div>
         <label>Email</label>
         <input type="email" name="email" value="{{ form.email.value|default:'' }}">
         <div class="form-grid">
-            <div><label>Teléfono</label><input type="tel" name="telefono" value="{{ form.telefono.value|default:'' }}"></div>
-            <div><label>Ciudad</label><input type="text" name="ciudad" value="{{ form.ciudad.value|default:'' }}"></div>
+            <div><label>{% trans "Phone" %}</label><input type="tel" name="telefono" value="{{ form.telefono.value|default:'' }}"></div>
+            <div><label>{% trans "City" %}</label><input type="text" name="ciudad" value="{{ form.ciudad.value|default:'' }}"></div>
         </div>
-        <label>Sobre ti</label>
+        <label>{% trans "About you" %}</label>
         <textarea name="bio" rows="3">{{ form.bio.value|default:'' }}</textarea>
         <label>Avatar</label>
         {% if user.avatar %}<img src="{{ user.avatar.url }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:0.6rem;">{% endif %}
         <input type="file" name="avatar" accept="image/*">
-        <button type="submit">Guardar cambios</button>
+        <button type="submit">{% trans "Save changes" %}</button>
     </form>
 </div>
 {% endblock %}

@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Chat con {{ otro.username }} - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "Chat with" %} {{ otro.username }} - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow" style="padding-top:1.5rem; padding-bottom:0;">
     <div class="chat-wrap">
 
         <div class="chat-header">
-            <a href="{% url 'bandeja_mensajes' %}" class="chat-back" title="Volver">&#8592;</a>
+            <a href="{% url 'bandeja_mensajes' %}" class="chat-back" title="{% trans "Back" %}">&#8592;</a>
             <div class="chat-header-av">{{ otro.username|first|upper }}</div>
             <div class="chat-header-info">
                 <div class="chat-header-name">
                     {{ otro.username }}
-                    {% if otro.verificado %}<span class="badge-verified">Verificado</span>{% endif %}
+                    {% if otro.verificado %}<span class="badge-verified">{% trans "Verified" %}</span>{% endif %}
                 </div>
                 <a href="{% url 'detalle_carro' carro.id %}" class="chat-header-car">
                     {{ carro.marca }} {{ carro.modelo }}{% if carro.anio %} &middot; {{ carro.anio }}{% endif %} &mdash; ${{ carro.precio|precio_fmt }}
@@ -33,15 +33,15 @@
             </div>
             {% empty %}
             <div class="chat-empty" id="chat-empty">
-                Sin mensajes aún. Escribe algo para empezar.
+                {% trans "No messages yet. Write something to start." %}
             </div>
             {% endfor %}
         </div>
 
         <form class="chat-form" id="chat-form" onsubmit="enviarMensaje(event)">
             {% csrf_token %}
-            <textarea id="chat-input" name="contenido" placeholder="Escribe un mensaje… (Enter para enviar)" rows="1" maxlength="1000" required></textarea>
-            <button type="submit" class="chat-send-btn" title="Enviar">&#10148;</button>
+            <textarea id="chat-input" name="contenido" placeholder="{% trans "Write a message… (Enter to send)" %}" rows="1" maxlength="1000" required></textarea>
+            <button type="submit" class="chat-send-btn" title="{% trans "Send" %}">&#10148;</button>
         </form>
 
     </div>
@@ -105,7 +105,6 @@ function enviarMensaje(e) {
     .catch(() => { btn.disabled = false; });
 }
 
-// Poll cada 3s para mensajes entrantes
 setInterval(() => {
     fetch(`/api/chat/${CARRO_ID}/${USERNAME}/poll/?since=${lastId}`)
         .then(r => r.json())
@@ -119,7 +118,6 @@ setInterval(() => {
         });
 }, 3000);
 
-// Auto-resize textarea
 const inp = document.getElementById('chat-input');
 inp.addEventListener('input', function() {
     this.style.height = 'auto';

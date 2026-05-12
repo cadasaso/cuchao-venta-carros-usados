@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Confirmar compra - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "Confirm purchase" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container-narrow">
-    <h1 class="section-title">Confirmar compra</h1>
+    <h1 class="section-title">{% trans "Confirm purchase" %}</h1>
 
     <div class="form-card" style="max-width:none; margin:0 0 1.5rem;">
         {% if carro.imagen %}
@@ -17,14 +17,14 @@
         </div>
         <p style="color:var(--text-soft); margin-bottom:1rem;">{{ carro.descripcion }}</p>
         <div class="flex-between" style="padding-top:1rem; border-top:1px solid var(--border);">
-            <span style="color:var(--text-soft);">Vendedor: <strong>{{ carro.propietario.username }}</strong></span>
+            <span style="color:var(--text-soft);">{% trans "Seller:" %} <strong>{{ carro.propietario.username }}</strong></span>
             <span style="font-size:1.8rem; font-weight:900; color:var(--primary-dark);">${{ carro.precio|precio_fmt }}</span>
         </div>
     </div>
 
     <form method="POST" action="{% url 'procesar_compra' carro.id %}" class="form-card" style="max-width:none; margin:0;">
         {% csrf_token %}
-        <h2 style="margin-bottom:1.2rem; font-size:1.2rem;">Método de pago</h2>
+        <h2 style="margin-bottom:1.2rem; font-size:1.2rem;">{% trans "Payment method" %}</h2>
         <div style="display:flex; flex-direction:column; gap:0.7rem;">
             {% for valor, etiqueta in metodos_pago %}
             <label style="display:flex; align-items:center; padding:1rem; border:2px solid var(--border); border-radius:10px; cursor:pointer; transition:all .2s;">
@@ -33,10 +33,10 @@
             </label>
             {% endfor %}
         </div>
-        <div class="flash warning" style="margin-top:1.5rem;">Compra simulada. No se realizará ningún cargo real.</div>
+        <div class="flash warning" style="margin-top:1.5rem;">{% trans "Simulated purchase. No real charge will be made." %}</div>
         <div class="flex" style="margin-top:1.5rem;">
-            <a href="{% url 'catalogo' %}" class="btn btn-ghost" style="flex:1; padding:0.95rem;">Cancelar</a>
-            <button type="submit" class="btn btn-success" style="flex:1; padding:0.95rem;">Confirmar compra</button>
+            <a href="{% url 'catalogo' %}" class="btn btn-ghost" style="flex:1; padding:0.95rem;">{% trans "Cancel" %}</a>
+            <button type="submit" class="btn btn-success" style="flex:1; padding:0.95rem;">{% trans "Confirm purchase" %}</button>
         </div>
     </form>
 </div>

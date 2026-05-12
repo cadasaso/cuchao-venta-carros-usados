@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Mis compras - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "My purchases" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="section-title">Mis compras</h1>
+    <h1 class="section-title">{% trans "My purchases" %}</h1>
     <div class="table-card">
         <table>
-            <thead><tr><th>ID</th><th>Carro</th><th>Vendedor</th><th>Método</th><th>Precio</th><th>Fecha</th></tr></thead>
+            <thead><tr><th>ID</th><th>{% trans "Car" %}</th><th>{% trans "Seller" %}</th><th>{% trans "Method" %}</th><th>{% trans "Price" %}</th><th>{% trans "Date" %}</th></tr></thead>
             <tbody>
             {% for c in compras %}
                 <tr>
@@ -18,7 +18,7 @@
                     <td>{{ c.fecha_compra|date:"d/m/Y" }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-soft);">Aún no has realizado compras</td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-soft);">{% trans "You haven't made any purchases yet" %}</td></tr>
             {% endfor %}
             </tbody>
         </table>

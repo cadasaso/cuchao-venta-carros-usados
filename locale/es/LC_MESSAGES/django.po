@@ -1,0 +1,1098 @@
+# Spanish translations for Cuchao.
+# Copyright (C) 2026 Cuchao
+# This file is distributed under the same license as the Cuchao package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cuchao 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-11 08:50-0500\n"
+"PO-Revision-Date: 2026-05-11 08:19-0500\n"
+"Last-Translator: Cuchao Team\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cuchao/settings.py:124
+msgid "Spanish"
+msgstr "Español"
+
+#: cuchao/settings.py:125
+msgid "English"
+msgstr "Inglés"
+
+#: templates/agregar_carro.html:3 templates/agregar_carro.html:6
+#: templates/agregar_carro.html:136
+msgid "Publish car"
+msgstr "Publicar carro"
+
+#: templates/agregar_carro.html:7
+msgid "Fill in the details to list your car on the marketplace"
+msgstr "Completa los detalles para publicar tu carro en el mercado"
+
+#: templates/agregar_carro.html:10 templates/comparar.html:27
+#: templates/editar_carro.html:10
+msgid "Model"
+msgstr "Modelo"
+
+#: templates/agregar_carro.html:15 templates/catalogo.html:73
+#: templates/editar_carro.html:15
+msgid "Brand"
+msgstr "Marca"
+
+#: templates/agregar_carro.html:19 templates/comparar.html:33
+#: templates/detalle_carro.html:31 templates/editar_carro.html:19
+msgid "Year"
+msgstr "Año"
+
+#: templates/agregar_carro.html:23 templates/comparar.html:36
+#: templates/detalle_carro.html:32 templates/editar_carro.html:23
+msgid "Mileage"
+msgstr "Kilometraje"
+
+#: templates/agregar_carro.html:27 templates/comparar.html:48
+#: templates/detalle_carro.html:35 templates/editar_carro.html:27
+msgid "Color"
+msgstr "Color"
+
+#: templates/agregar_carro.html:28
+msgid "Black"
+msgstr "Negro"
+
+#: templates/agregar_carro.html:31 templates/catalogo.html:86
+#: templates/comparar.html:39 templates/detalle_carro.html:33
+#: templates/editar_carro.html:31
+msgid "Transmission"
+msgstr "Transmisión"
+
+#: templates/agregar_carro.html:34 templates/editar_carro.html:34
+msgid "Manual"
+msgstr "Manual"
+
+#: templates/agregar_carro.html:35 templates/editar_carro.html:35
+msgid "Automatic"
+msgstr "Automática"
+
+#: templates/agregar_carro.html:39 templates/catalogo.html:95
+#: templates/comparar.html:42 templates/detalle_carro.html:34
+#: templates/editar_carro.html:39
+msgid "Fuel"
+msgstr "Combustible"
+
+#: templates/agregar_carro.html:42 templates/editar_carro.html:42
+msgid "Gasoline"
+msgstr "Gasolina"
+
+#: templates/agregar_carro.html:43 templates/editar_carro.html:43
+msgid "Diesel"
+msgstr "Diésel"
+
+#: templates/agregar_carro.html:44 templates/editar_carro.html:44
+msgid "Hybrid"
+msgstr "Híbrido"
+
+#: templates/agregar_carro.html:45 templates/editar_carro.html:45
+msgid "Electric"
+msgstr "Eléctrico"
+
+#: templates/agregar_carro.html:46 templates/editar_carro.html:46
+msgid "Gas"
+msgstr "Gas"
+
+#: templates/agregar_carro.html:50 templates/catalogo.html:77
+#: templates/comparar.html:45 templates/detalle_carro.html:36
+#: templates/editar_carro.html:50
+msgid "Category"
+msgstr "Categoría"
+
+#: templates/agregar_carro.html:58 templates/editar_carro.html:58
+msgid "Convertible"
+msgstr "Convertible"
+
+#: templates/agregar_carro.html:60 templates/editar_carro.html:60
+msgid "Sports"
+msgstr "Deportivo"
+
+#: templates/agregar_carro.html:64 templates/comparar.html:51
+#: templates/detalle_carro.html:37 templates/editar_carro.html:64
+msgid "Condition"
+msgstr "Estado"
+
+#: templates/agregar_carro.html:67 templates/editar_carro.html:67
+msgid "Excellent"
+msgstr "Excelente"
+
+#: templates/agregar_carro.html:68 templates/editar_carro.html:68
+msgid "Very good"
+msgstr "Muy bueno"
+
+#: templates/agregar_carro.html:69 templates/editar_carro.html:69
+msgid "Good"
+msgstr "Bueno"
+
+#: templates/agregar_carro.html:70 templates/editar_carro.html:70
+msgid "Fair"
+msgstr "Regular"
+
+#: templates/agregar_carro.html:74 templates/editar_carro.html:74
+#: templates/editar_perfil.html:18
+msgid "City"
+msgstr "Ciudad"
+
+#: templates/agregar_carro.html:78 templates/catalogo.html:104
+#: templates/comparar.html:30 templates/compra_exitosa.html:17
+#: templates/dashboard.html:72 templates/editar_carro.html:78
+#: templates/mis_compras.html:9
+msgid "Price"
+msgstr "Precio"
+
+#: templates/agregar_carro.html:85
+msgid "Generate description with AI"
+msgstr "Generar descripción con IA"
+
+#: templates/agregar_carro.html:86
+msgid ""
+"Fill in Brand, Model and Year to automatically generate a professional title "
+"and description."
+msgstr ""
+"Completa Marca, Modelo y Año para generar automáticamente un título y "
+"descripción profesional."
+
+#: templates/agregar_carro.html:88
+msgid "Generate with AI"
+msgstr "Generar con IA"
+
+#: templates/agregar_carro.html:90
+msgid "Generating..."
+msgstr "Generando..."
+
+#: templates/agregar_carro.html:95
+msgid "Suggested title"
+msgstr "Título sugerido"
+
+#: templates/agregar_carro.html:98 templates/agregar_carro.html:113
+#: templates/detalle_carro.html:17 templates/editar_carro.html:83
+msgid "Description"
+msgstr "Descripción"
+
+#: templates/agregar_carro.html:101
+msgid "Highlights"
+msgstr "Aspectos destacados"
+
+#: templates/agregar_carro.html:104
+msgid "Closing text"
+msgstr "Texto de cierre"
+
+#: templates/agregar_carro.html:108
+msgid "Use this description in the form"
+msgstr "Usar esta descripción en el formulario"
+
+#: templates/agregar_carro.html:116 templates/editar_carro.html:86
+msgid "Main photo"
+msgstr "Foto principal"
+
+#: templates/agregar_carro.html:121
+msgid "Negotiable price (receive offers)"
+msgstr "Precio negociable (recibir ofertas)"
+
+#: templates/agregar_carro.html:125
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: templates/agregar_carro.html:155
+msgid "Fill in Brand, Model and Year before generating."
+msgstr "Completa Marca, Modelo y Año antes de generar."
+
+#: templates/agregar_carro.html:206
+msgid "Could not connect to the server. Try again."
+msgstr "No se pudo conectar al servidor. Intenta de nuevo."
+
+#: templates/agregar_carro.html:216
+msgid "Highlights:"
+msgstr "Aspectos destacados:"
+
+#: templates/base.html:7
+msgid "Used car marketplace"
+msgstr "Mercado de carros usados"
+
+#: templates/base.html:24 templates/base.html:108
+msgid "Explore"
+msgstr "Explorar"
+
+#: templates/base.html:26
+msgid "Favorites"
+msgstr "Favoritos"
+
+#: templates/base.html:27 templates/mensajes.html:3 templates/mensajes.html:6
+msgid "Messages"
+msgstr "Mensajes"
+
+#: templates/base.html:28
+msgid "Offers"
+msgstr "Ofertas"
+
+#: templates/base.html:33 templates/base.html:39
+#: templates/notificaciones.html:3
+msgid "Notifications"
+msgstr "Notificaciones"
+
+#: templates/base.html:40
+msgid "Mark all read"
+msgstr "Marcar todo como leído"
+
+#: templates/base.html:43
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: templates/base.html:45
+msgid "See all"
+msgstr "Ver todas"
+
+#: templates/base.html:50 templates/base.html:59
+msgid "Toggle theme"
+msgstr "Cambiar tema"
+
+#: templates/base.html:52
+msgid "Sell"
+msgstr "Vender"
+
+#: templates/base.html:56
+msgid "Sign out"
+msgstr "Cerrar sesión"
+
+#: templates/base.html:60 templates/base.html:122 templates/login.html:3
+#: templates/login.html:15 templates/register.html:24
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: templates/base.html:61 templates/base.html:123 templates/register.html:3
+#: templates/register.html:23
+msgid "Create account"
+msgstr "Crear cuenta"
+
+#: templates/base.html:88
+msgid "Compare:"
+msgstr "Comparar:"
+
+#: templates/base.html:90 templates/catalogo.html:149
+msgid "Compare"
+msgstr "Comparar"
+
+#: templates/base.html:91 templates/catalogo.html:121
+msgid "Clear"
+msgstr "Limpiar"
+
+#: templates/base.html:105
+msgid ""
+"The #1 marketplace for verified used cars. Buy and sell with confidence, "
+"directly between owners."
+msgstr ""
+"El marketplace #1 de carros usados verificados. Compra y vende con "
+"confianza, directamente entre propietarios."
+
+#: templates/base.html:109 templates/catalogo.html:4
+msgid "Catalog"
+msgstr "Catálogo"
+
+#: templates/base.html:111
+msgid "Sedans"
+msgstr "Sedanes"
+
+#: templates/base.html:115
+msgid "My account"
+msgstr "Mi cuenta"
+
+#: templates/base.html:118 templates/compra_exitosa.html:43
+#: templates/mis_compras.html:3 templates/mis_compras.html:6
+msgid "My purchases"
+msgstr "Mis compras"
+
+#: templates/base.html:119 templates/ofertas.html:3
+msgid "My offers"
+msgstr "Mis ofertas"
+
+#: templates/base.html:120 templates/historial.html:3
+msgid "History"
+msgstr "Historial"
+
+#: templates/base.html:127 templates/catalogo.html:19
+msgid "Support"
+msgstr "Soporte"
+
+#: templates/base.html:128
+msgid "Help center"
+msgstr "Centro de ayuda"
+
+#: templates/base.html:129
+msgid "Terms"
+msgstr "Términos"
+
+#: templates/base.html:130
+msgid "Privacy"
+msgstr "Privacidad"
+
+#: templates/base.html:131
+msgid "Contact"
+msgstr "Contacto"
+
+#: templates/base.html:135
+msgid "Made with love for car enthusiasts"
+msgstr "Hecho con amor para los amantes de los carros"
+
+#: templates/base.html:178 templates/notificaciones.html:25
+msgid "No notifications"
+msgstr "Sin notificaciones"
+
+#: templates/base.html:229
+msgid "Maximum 4 cars to compare"
+msgstr "Máximo 4 carros para comparar"
+
+#: templates/base.html:250
+msgid "Select at least 2 cars"
+msgstr "Selecciona al menos 2 carros"
+
+#: templates/catalogo.html:9
+msgid "Find your next"
+msgstr "Encuentra tu próximo"
+
+#: templates/catalogo.html:9
+msgid "perfect car"
+msgstr "carro perfecto"
+
+#: templates/catalogo.html:10
+msgid ""
+"Thousands of verified used cars, sold directly by their owners. Easy, fast "
+"and secure."
+msgstr "Miles de carros usados verificados, vendidos directamente por sus dueños. Fácil, rápido y seguro."
+
+#: templates/catalogo.html:12
+msgid "Search by brand, model or city..."
+msgstr "Busca por marca, modelo o ciudad..."
+
+#: templates/catalogo.html:13 templates/catalogo.html:69
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/catalogo.html:17
+msgid "Available cars"
+msgstr "Carros disponibles"
+
+#: templates/catalogo.html:18 templates/catalogo.html:172
+#: templates/chat.html:14 templates/comparar.html:59
+#: templates/detalle_carro.html:106
+msgid "Verified"
+msgstr "Verificado"
+
+#: templates/catalogo.html:27
+msgid "Continue watching"
+msgstr "Continuar viendo"
+
+#: templates/catalogo.html:42
+msgid "Featured cars"
+msgstr "Carros destacados"
+
+#: templates/catalogo.html:49
+msgid "Featured"
+msgstr "Destacado"
+
+#: templates/catalogo.html:66
+msgid "Filters"
+msgstr "Filtros"
+
+#: templates/catalogo.html:70
+msgid "Model, brand..."
+msgstr "Modelo, marca..."
+
+#: templates/catalogo.html:79 templates/catalogo.html:88
+#: templates/catalogo.html:97
+msgid "All"
+msgstr "Todos"
+
+#: templates/catalogo.html:111
+msgid "Year from"
+msgstr "Año desde"
+
+#: templates/catalogo.html:117
+msgid "Available only"
+msgstr "Solo disponibles"
+
+#: templates/catalogo.html:120
+msgid "Apply filters"
+msgstr "Aplicar filtros"
+
+#: templates/catalogo.html:127
+msgid "results"
+msgstr "resultados"
+
+#: templates/catalogo.html:130
+msgid "Sort:"
+msgstr "Ordenar:"
+
+#: templates/catalogo.html:132
+msgid "Most recent"
+msgstr "Más recientes"
+
+#: templates/catalogo.html:133
+msgid "Price: low to high"
+msgstr "Precio: menor a mayor"
+
+#: templates/catalogo.html:134
+msgid "Price: high to low"
+msgstr "Precio: mayor a menor"
+
+#: templates/catalogo.html:135
+msgid "Most popular"
+msgstr "Más populares"
+
+#: templates/catalogo.html:146 templates/dashboard.html:12
+#: templates/dashboard.html:39 templates/detalle_carro.html:24
+#: templates/favoritos.html:14 templates/perfil.html:28
+msgid "Sold"
+msgstr "Vendido"
+
+#: templates/catalogo.html:147 templates/dashboard.html:11
+#: templates/detalle_carro.html:25 templates/favoritos.html:14
+msgid "Available"
+msgstr "Disponible"
+
+#: templates/catalogo.html:153 templates/detalle_carro.html:55
+msgid "Remove from favorites"
+msgstr "Quitar de favoritos"
+
+#: templates/catalogo.html:153 templates/detalle_carro.html:55
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/catalogo.html:171
+msgid "Negotiable"
+msgstr "Negociable"
+
+#: templates/catalogo.html:172
+msgid "By"
+msgstr "Por"
+
+#: templates/catalogo.html:174 templates/comparar.html:68
+msgid "View details"
+msgstr "Ver detalles"
+
+#: templates/catalogo.html:176
+msgid "Buy"
+msgstr "Comprar"
+
+#: templates/catalogo.html:178 templates/dashboard.html:50
+#: templates/detalle_carro.html:58
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/catalogo.html:179
+msgid "Delete this car?"
+msgstr "¿Eliminar este carro?"
+
+#: templates/catalogo.html:181 templates/dashboard.html:53
+msgid "Delete"
+msgstr "Eliminar"
+
+#: templates/catalogo.html:190
+msgid "No cars found"
+msgstr "No se encontraron carros"
+
+#: templates/catalogo.html:191
+msgid "Try changing the search filters"
+msgstr "Prueba cambiando los filtros de búsqueda"
+
+#: templates/catalogo.html:212
+msgid "No results"
+msgstr "Sin resultados"
+
+#: templates/chat.html:3
+msgid "Chat with"
+msgstr "Chat con"
+
+#: templates/chat.html:9
+msgid "Back"
+msgstr "Volver"
+
+#: templates/chat.html:36
+msgid "No messages yet. Write something to start."
+msgstr "Sin mensajes aún. Escribe algo para comenzar."
+
+#: templates/chat.html:43
+msgid "Write a message… (Enter to send)"
+msgstr "Escribe un mensaje… (Enter para enviar)"
+
+#: templates/chat.html:44
+msgid "Send"
+msgstr "Enviar"
+
+#: templates/comparar.html:3
+msgid "Compare cars"
+msgstr "Comparar carros"
+
+#: templates/comparar.html:6
+msgid "Car comparator"
+msgstr "Comparador de carros"
+
+#: templates/comparar.html:7
+msgid "Find the key differences between your favorite options"
+msgstr "Encuentra las diferencias clave entre tus opciones favoritas"
+
+#: templates/comparar.html:12
+msgid "Select at least 2 cars to compare"
+msgstr "Selecciona al menos 2 carros para comparar"
+
+#: templates/comparar.html:13
+msgid "Go back to the catalog and click the \\"
+msgstr "Vuelve al catálogo y haz clic en \\"
+
+#: templates/comparar.html:14
+msgid "Go to catalog"
+msgstr "Ir al catálogo"
+
+#: templates/comparar.html:18
+msgid "Image"
+msgstr "Imagen"
+
+#: templates/comparar.html:22
+msgid "No image"
+msgstr "Sin imagen"
+
+#: templates/comparar.html:54
+msgid "Location"
+msgstr "Ubicación"
+
+#: templates/comparar.html:57 templates/mis_compras.html:9
+msgid "Seller"
+msgstr "Vendedor"
+
+#: templates/comparar.html:60 templates/detalle_carro.html:108
+#: templates/perfil.html:14
+msgid "sales"
+msgstr "ventas"
+
+#: templates/comparar.html:63
+msgid "Views"
+msgstr "Visitas"
+
+#: templates/comparar.html:64 templates/dashboard.html:44
+#: templates/detalle_carro.html:27
+msgid "views"
+msgstr "visitas"
+
+#: templates/comparar.html:66
+msgid "Action"
+msgstr "Acción"
+
+#: templates/compra_exitosa.html:3
+msgid "Purchase successful!"
+msgstr "¡Compra exitosa!"
+
+#: templates/compra_exitosa.html:8
+msgid "Purchase completed!"
+msgstr "¡Compra completada!"
+
+#: templates/compra_exitosa.html:9
+msgid "Your transaction was processed successfully"
+msgstr "Tu transacción fue procesada con éxito"
+
+#: templates/compra_exitosa.html:13
+msgid "Product"
+msgstr "Producto"
+
+#: templates/compra_exitosa.html:21 templates/dashboard.html:72
+#: templates/mis_compras.html:9
+msgid "Method"
+msgstr "Método"
+
+#: templates/compra_exitosa.html:25 templates/dashboard.html:72
+#: templates/mis_compras.html:9
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/compra_exitosa.html:29
+msgid "Purchase ID"
+msgstr "ID de compra"
+
+#: templates/compra_exitosa.html:34
+msgid "Payment ref."
+msgstr "Ref. de pago"
+
+#: templates/compra_exitosa.html:40
+msgid "Simulated purchase for demonstration."
+msgstr "Compra simulada para demostración."
+
+#: templates/compra_exitosa.html:42 templates/editar_carro.html:91
+msgid "Back to catalog"
+msgstr "Volver al catálogo"
+
+#: templates/confirmar_compra.html:3 templates/confirmar_compra.html:6
+#: templates/confirmar_compra.html:39
+msgid "Confirm purchase"
+msgstr "Confirmar compra"
+
+#: templates/confirmar_compra.html:20
+msgid "Seller:"
+msgstr "Vendedor:"
+
+#: templates/confirmar_compra.html:27
+msgid "Payment method"
+msgstr "Método de pago"
+
+#: templates/confirmar_compra.html:36
+msgid "Simulated purchase. No real charge will be made."
+msgstr "Compra simulada. No se realizará ningún cargo real."
+
+#: templates/confirmar_compra.html:38
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/dashboard.html:7
+msgid "Summary of your activity as a seller"
+msgstr "Resumen de tu actividad como vendedor"
+
+#: templates/dashboard.html:10
+msgid "Total published"
+msgstr "Total publicados"
+
+#: templates/dashboard.html:13
+msgid "Total earnings"
+msgstr "Ganancias totales"
+
+#: templates/dashboard.html:14
+msgid "Views on your listings"
+msgstr "Visitas a tus publicaciones"
+
+#: templates/dashboard.html:15
+msgid "Favorites received"
+msgstr "Favoritos recibidos"
+
+#: templates/dashboard.html:16
+msgid "Sales last 30 days"
+msgstr "Ventas últimos 30 días"
+
+#: templates/dashboard.html:17
+msgid "New messages"
+msgstr "Mensajes nuevos"
+
+#: templates/dashboard.html:18
+msgid "Pending offers"
+msgstr "Ofertas pendientes"
+
+#: templates/dashboard.html:22
+msgid "Sales in the last 6 months"
+msgstr "Ventas en los últimos 6 meses"
+
+#: templates/dashboard.html:33
+msgid "My published cars"
+msgstr "Mis carros publicados"
+
+#: templates/dashboard.html:39
+msgid "Active"
+msgstr "Activo"
+
+#: templates/dashboard.html:44
+msgid "favorites"
+msgstr "favoritos"
+
+#: templates/dashboard.html:46
+msgid "Published:"
+msgstr "Publicado:"
+
+#: templates/dashboard.html:47
+msgid "Edited:"
+msgstr "Editado:"
+
+#: templates/dashboard.html:51
+msgid "Delete?"
+msgstr "¿Eliminar?"
+
+#: templates/dashboard.html:61
+msgid "You haven't published any cars yet"
+msgstr "No has publicado ningún carro aún"
+
+#: templates/dashboard.html:62
+msgid "Start now and reach thousands of buyers"
+msgstr "Comienza ahora y llega a miles de compradores"
+
+#: templates/dashboard.html:63
+msgid "Publish my first car"
+msgstr "Publicar mi primer carro"
+
+#: templates/dashboard.html:69
+msgid "Latest sales"
+msgstr "Últimas ventas"
+
+#: templates/dashboard.html:72 templates/mis_compras.html:9
+msgid "Car"
+msgstr "Carro"
+
+#: templates/dashboard.html:72
+msgid "Buyer"
+msgstr "Comprador"
+
+#: templates/detalle_carro.html:18
+msgid "No description."
+msgstr "Sin descripción."
+
+#: templates/detalle_carro.html:27
+msgid "Location not specified"
+msgstr "Ubicación no especificada"
+
+#: templates/detalle_carro.html:38
+msgid "Published"
+msgstr "Publicado"
+
+#: templates/detalle_carro.html:40
+msgid "Updated"
+msgstr "Actualizado"
+
+#: templates/detalle_carro.html:52
+msgid "Buy now"
+msgstr "Comprar ahora"
+
+#: templates/detalle_carro.html:55
+msgid "Saved"
+msgstr "Guardado"
+
+#: templates/detalle_carro.html:60
+msgid "Sign in to buy"
+msgstr "Iniciar sesión para comprar"
+
+#: templates/detalle_carro.html:66
+msgid "Financing simulator"
+msgstr "Simulador de financiamiento"
+
+#: templates/detalle_carro.html:69
+msgid "Down payment ($)"
+msgstr "Cuota inicial ($)"
+
+#: templates/detalle_carro.html:73
+msgid "Term (months)"
+msgstr "Plazo (meses)"
+
+#: templates/detalle_carro.html:75 templates/detalle_carro.html:76
+#: templates/detalle_carro.html:77 templates/detalle_carro.html:78
+#: templates/detalle_carro.html:79 templates/detalle_carro.html:80
+msgid "months"
+msgstr "meses"
+
+#: templates/detalle_carro.html:86
+#, python-format
+msgid "Annual rate (%%)"
+msgstr "Tasa anual (%%)"
+
+#: templates/detalle_carro.html:90
+#, python-format
+msgid "30%% down"
+msgstr "30%% de entrada"
+
+#: templates/detalle_carro.html:95
+msgid "estimated monthly payment"
+msgstr "pago mensual estimado"
+
+#: templates/detalle_carro.html:114
+msgid "View seller profile"
+msgstr "Ver perfil del vendedor"
+
+#: templates/detalle_carro.html:119
+msgid "Message to seller"
+msgstr "Mensaje al vendedor"
+
+#: templates/detalle_carro.html:121
+msgid "Send message"
+msgstr "Enviar mensaje"
+
+#: templates/detalle_carro.html:129
+msgid "Make an offer"
+msgstr "Hacer una oferta"
+
+#: templates/detalle_carro.html:130
+msgid "Negotiate the price directly with the seller."
+msgstr "Negocia el precio directamente con el vendedor."
+
+#: templates/detalle_carro.html:133
+msgid "Your offer in $"
+msgstr "Tu oferta en $"
+
+#: templates/detalle_carro.html:134
+msgid "Message (optional)"
+msgstr "Mensaje (opcional)"
+
+#: templates/detalle_carro.html:135
+msgid "Send offer"
+msgstr "Enviar oferta"
+
+#: templates/detalle_carro.html:139
+msgid "Your previous offers:"
+msgstr "Tus ofertas anteriores:"
+
+#: templates/detalle_carro.html:154
+msgid "Similar cars"
+msgstr "Carros similares"
+
+#: templates/editar_carro.html:3 templates/editar_carro.html:6
+msgid "Edit car"
+msgstr "Editar carro"
+
+#: templates/editar_carro.html:7
+msgid "Update the information for your listing"
+msgstr "Actualiza la información de tu publicación"
+
+#: templates/editar_carro.html:90 templates/editar_perfil.html:25
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+#: templates/editar_perfil.html:3 templates/editar_perfil.html:6
+#: templates/perfil.html:19
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/editar_perfil.html:7
+msgid "Update your public information"
+msgstr "Actualiza tu información pública"
+
+#: templates/editar_perfil.html:11
+msgid "First name"
+msgstr "Nombre"
+
+#: templates/editar_perfil.html:12
+msgid "Last name"
+msgstr "Apellido"
+
+#: templates/editar_perfil.html:17
+msgid "Phone"
+msgstr "Teléfono"
+
+#: templates/editar_perfil.html:20
+msgid "About you"
+msgstr "Sobre ti"
+
+#: templates/favoritos.html:3 templates/favoritos.html:6
+msgid "My favorites"
+msgstr "Mis favoritos"
+
+#: templates/favoritos.html:7
+msgid "Cars you saved to view later"
+msgstr "Carros que guardaste para ver después"
+
+#: templates/favoritos.html:20
+msgid "View"
+msgstr "Ver"
+
+#: templates/favoritos.html:23
+msgid "Remove"
+msgstr "Eliminar"
+
+#: templates/favoritos.html:31
+msgid "No favorites yet"
+msgstr "Sin favoritos aún"
+
+#: templates/favoritos.html:32
+msgid "Explore the catalog and save the cars you're interested in"
+msgstr "Explora el catálogo y guarda los carros que te interesan"
+
+#: templates/historial.html:6
+msgid "Browsing history"
+msgstr "Historial de visitas"
+
+#: templates/historial.html:7
+msgid "Cars you've viewed recently"
+msgstr "Carros que has visto recientemente"
+
+#: templates/historial.html:18
+msgid "Viewed"
+msgstr "Visto"
+
+#: templates/historial.html:18
+msgid "ago"
+msgstr "hace"
+
+#: templates/historial.html:24
+msgid "You haven't viewed any cars yet"
+msgstr "No has visto ningún carro aún"
+
+#: templates/login.html:6
+msgid "Welcome back"
+msgstr "Bienvenido de nuevo"
+
+#: templates/login.html:7
+msgid "Sign in to access your account"
+msgstr "Inicia sesión para acceder a tu cuenta"
+
+#: templates/login.html:11 templates/register.html:11
+msgid "Username"
+msgstr "Usuario"
+
+#: templates/login.html:12
+msgid "Your username"
+msgstr "Tu nombre de usuario"
+
+#: templates/login.html:13 templates/register.html:17
+msgid "Password"
+msgstr "Contraseña"
+
+#: templates/login.html:16
+msgid "Don't have an account?"
+msgstr "¿No tienes cuenta?"
+
+#: templates/login.html:16
+msgid "Sign up for free"
+msgstr "Regístrate gratis"
+
+#: templates/mensajes.html:17
+msgid "You:"
+msgstr "Tú:"
+
+#: templates/mensajes.html:25
+msgid "No conversations"
+msgstr "Sin conversaciones"
+
+#: templates/mensajes.html:26
+msgid "When you contact a seller, the conversation will appear here."
+msgstr "Cuando contactes a un vendedor, la conversación aparecerá aquí."
+
+#: templates/mensajes.html:27
+msgid "Explore cars"
+msgstr "Explorar carros"
+
+#: templates/mis_compras.html:21
+msgid "You haven't made any purchases yet"
+msgstr "No has realizado ninguna compra aún"
+
+#: templates/notificaciones.html:6
+msgid "All notifications"
+msgstr "Todas las notificaciones"
+
+#: templates/notificaciones.html:7
+msgid "Your recent activity on Cuchao"
+msgstr "Tu actividad reciente en Cuchao"
+
+#: templates/notificaciones.html:26
+msgid "When you receive messages, offers or sales they will appear here."
+msgstr "Cuando recibas mensajes, ofertas o ventas aparecerán aquí."
+
+#: templates/ofertas.html:6
+msgid "Offers center"
+msgstr "Centro de ofertas"
+
+#: templates/ofertas.html:7
+msgid "Negotiate prices with buyers and sellers"
+msgstr "Negocia precios con compradores y vendedores"
+
+#: templates/ofertas.html:10
+msgid "Received"
+msgstr "Recibidas"
+
+#: templates/ofertas.html:11
+msgid "Made"
+msgstr "Realizadas"
+
+#: templates/ofertas.html:20
+msgid "from"
+msgstr "de"
+
+#: templates/ofertas.html:26
+msgid "listed price:"
+msgstr "precio listado:"
+
+#: templates/ofertas.html:26
+msgid "less"
+msgstr "menos"
+
+#: templates/ofertas.html:34
+msgid "Accept"
+msgstr "Aceptar"
+
+#: templates/ofertas.html:39
+msgid "Reject"
+msgstr "Rechazar"
+
+#: templates/ofertas.html:44
+msgid "Counter-offer $"
+msgstr "Contraoferta $"
+
+#: templates/ofertas.html:45
+msgid "Counter-offer"
+msgstr "Contraoferta"
+
+#: templates/ofertas.html:49
+msgid "Your counter-offer:"
+msgstr "Tu contraoferta:"
+
+#: templates/ofertas.html:53
+msgid "No offers received"
+msgstr "Sin ofertas recibidas"
+
+#: templates/ofertas.html:69
+msgid "Seller's counter-offer:"
+msgstr "Contraoferta del vendedor:"
+
+#: templates/ofertas.html:73
+msgid "You haven't made any offers yet"
+msgstr "No has realizado ninguna oferta aún"
+
+#: templates/ofertas.html:73
+msgid "Find a car you like and negotiate the price."
+msgstr "Encuentra un carro que te guste y negocia el precio."
+
+#: templates/perfil.html:11
+msgid "Seller on Cuchao"
+msgstr "Vendedor en Cuchao"
+
+#: templates/perfil.html:14
+msgid "Since"
+msgstr "Desde"
+
+#: templates/perfil.html:24
+msgid "Published cars"
+msgstr "Carros publicados"
+
+#: templates/perfil.html:35
+msgid "No listings"
+msgstr "Sin publicaciones"
+
+#: templates/perfil.html:39
+msgid "Reviews"
+msgstr "Reseñas"
+
+#: templates/perfil.html:42
+msgid "Leave your review"
+msgstr "Deja tu reseña"
+
+#: templates/perfil.html:45
+msgid "Rating (1-5)"
+msgstr "Calificación (1-5)"
+
+#: templates/perfil.html:47
+msgid "Comment"
+msgstr "Comentario"
+
+#: templates/perfil.html:48
+msgid "Share your experience..."
+msgstr "Comparte tu experiencia..."
+
+#: templates/perfil.html:49
+msgid "Publish review"
+msgstr "Publicar reseña"
+
+#: templates/perfil.html:65
+msgid "No reviews yet"
+msgstr "Sin reseñas aún"
+
+#: templates/register.html:6
+msgid "Join Cuchao"
+msgstr "Únete a Cuchao"
+
+#: templates/register.html:7
+msgid "Buy and sell used cars easily and securely"
+msgstr "Compra y vende carros usados de forma fácil y segura"
+
+#: templates/register.html:20
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+#: templates/register.html:24
+msgid "Already have an account?"
+msgstr "¿Ya tienes cuenta?"

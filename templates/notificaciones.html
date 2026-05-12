@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Notificaciones - Cuchao{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Notifications" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="section-title">Todas las notificaciones</h1>
-    <p class="section-subtitle">Tu actividad reciente en Cuchao</p>
+    <h1 class="section-title">{% trans "All notifications" %}</h1>
+    <p class="section-subtitle">{% trans "Your recent activity on Cuchao" %}</p>
 
     <div class="msg-list">
         {% for n in notificaciones %}
@@ -21,8 +22,8 @@
         {% empty %}
         <div class="empty-state">
             <div class="icon"></div>
-            <h3>Sin notificaciones</h3>
-            <p>Cuando recibas mensajes, ofertas o ventas aparecerán aquí.</p>
+            <h3>{% trans "No notifications" %}</h3>
+            <p>{% trans "When you receive messages, offers or sales they will appear here." %}</p>
         </div>
         {% endfor %}
     </div>

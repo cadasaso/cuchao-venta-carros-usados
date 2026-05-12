@@ -1,26 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}Crear cuenta - Cuchao{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Create account" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="form-card">
-    <h1>Únete a Cuchao</h1>
-    <p class="subtitle">Compra y vende carros usados de forma fácil y segura</p>
+    <h1>{% trans "Join Cuchao" %}</h1>
+    <p class="subtitle">{% trans "Buy and sell used cars easily and securely" %}</p>
     <form method="post" novalidate>
         {% csrf_token %}
         {% if form.non_field_errors %}<div class="error-box">{{ form.non_field_errors }}</div>{% endif %}
-        <label for="id_username">Usuario</label>
+        <label for="id_username">{% trans "Username" %}</label>
         <input type="text" id="id_username" name="username" value="{{ form.username.value|default:'' }}" required>
         {% if form.username.errors %}<div class="error-box">{{ form.username.errors|join:', ' }}</div>{% endif %}
         <label for="id_email">Email</label>
         <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" required>
         {% if form.email.errors %}<div class="error-box">{{ form.email.errors|join:', ' }}</div>{% endif %}
-        <label for="id_password1">Contraseña</label>
+        <label for="id_password1">{% trans "Password" %}</label>
         <input type="password" id="id_password1" name="password1" required>
         {% if form.password1.errors %}<div class="error-box">{{ form.password1.errors|join:', ' }}</div>{% endif %}
-        <label for="id_password2">Confirmar contraseña</label>
+        <label for="id_password2">{% trans "Confirm password" %}</label>
         <input type="password" id="id_password2" name="password2" required>
         {% if form.password2.errors %}<div class="error-box">{{ form.password2.errors|join:', ' }}</div>{% endif %}
-        <button type="submit">Crear cuenta</button>
-        <p class="form-footer">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+        <button type="submit">{% trans "Create account" %}</button>
+        <p class="form-footer">{% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Sign in" %}</a></p>
     </form>
 </div>
 {% endblock %}

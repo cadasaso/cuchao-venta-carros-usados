@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
+{% load i18n cuchao_filters %}
 {% block title %}Dashboard - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
     <h1 class="section-title">Dashboard</h1>
-    <p class="section-subtitle">Resumen de tu actividad como vendedor</p>
+    <p class="section-subtitle">{% trans "Summary of your activity as a seller" %}</p>
 
     <div class="dashboard-grid">
-        <div class="stat-card"><div class="stat-value">{{ total_carros }}</div><div class="stat-label">Total publicados</div></div>
-        <div class="stat-card"><div class="stat-value">{{ disponibles }}</div><div class="stat-label">Disponibles</div></div>
-        <div class="stat-card"><div class="stat-value">{{ vendidos }}</div><div class="stat-label">Vendidos</div></div>
-        <div class="stat-card"><div class="stat-value">${{ ingresos|precio_fmt }}</div><div class="stat-label">Ingresos totales</div></div>
-        <div class="stat-card"><div class="stat-value">{{ total_vistas }}</div><div class="stat-label">Vistas en tus anuncios</div></div>
-        <div class="stat-card"><div class="stat-value">{{ favoritos_recibidos }}</div><div class="stat-label">Favoritos recibidos</div></div>
-        <div class="stat-card"><div class="stat-value">{{ ventas_recientes }}</div><div class="stat-label">Ventas últimos 30 días</div></div>
-        <div class="stat-card"><div class="stat-value">{{ mensajes_no_leidos }}</div><div class="stat-label">Mensajes nuevos</div></div>
-        <div class="stat-card"><div class="stat-value">{{ ofertas_pendientes }}</div><div class="stat-label">Ofertas pendientes</div></div>
+        <div class="stat-card"><div class="stat-value">{{ total_carros }}</div><div class="stat-label">{% trans "Total published" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ disponibles }}</div><div class="stat-label">{% trans "Available" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ vendidos }}</div><div class="stat-label">{% trans "Sold" %}</div></div>
+        <div class="stat-card"><div class="stat-value">${{ ingresos|precio_fmt }}</div><div class="stat-label">{% trans "Total earnings" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ total_vistas }}</div><div class="stat-label">{% trans "Views on your listings" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ favoritos_recibidos }}</div><div class="stat-label">{% trans "Favorites received" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ ventas_recientes }}</div><div class="stat-label">{% trans "Sales last 30 days" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ mensajes_no_leidos }}</div><div class="stat-label">{% trans "New messages" %}</div></div>
+        <div class="stat-card"><div class="stat-value">{{ ofertas_pendientes }}</div><div class="stat-label">{% trans "Pending offers" %}</div></div>
     </div>
 
     <div class="chart-card">
-        <h3>Ventas de los últimos 6 meses</h3>
+        <h3>{% trans "Sales in the last 6 months" %}</h3>
         <div class="chart-bars">
             {% for c in chart_data %}
             <div class="chart-bar-wrap">
@@ -30,27 +30,27 @@
         </div>
     </div>
 
-    <h2 class="section-title">Mis carros publicados</h2>
+    <h2 class="section-title">{% trans "My published cars" %}</h2>
     <div class="catalog-grid mb-3">
         {% for carro in mis_carros %}
         <div class="car-card">
             <a href="{% url 'detalle_carro' carro.id %}" class="car-img">
                 {% if carro.imagen %}<img src="{{ carro.imagen.url }}">{% else %}<div class="car-img-placeholder"></div>{% endif %}
-                {% if carro.vendido %}<span class="badge-vendido">Vendido</span>{% else %}<span class="badge-disponible">Activo</span>{% endif %}
+                {% if carro.vendido %}<span class="badge-vendido">{% trans "Sold" %}</span>{% else %}<span class="badge-disponible">{% trans "Active" %}</span>{% endif %}
             </a>
             <div class="car-body">
                 <h3>{{ carro.marca }} {{ carro.modelo }}</h3>
                 <div class="car-price">${{ carro.precio|precio_fmt }}</div>
-                <div class="car-meta"><span>{{ carro.vistas }} vistas</span><span>{{ carro.total_favoritos }} favoritos</span></div>
+                <div class="car-meta"><span>{{ carro.vistas }} {% trans "views" %}</span><span>{{ carro.total_favoritos }} {% trans "favorites" %}</span></div>
                 <div class="car-meta" style="margin-top:0.25rem; font-size:0.75rem; color:var(--text-soft);">
-                    <span>Publicado: {{ carro.fecha_publicacion|date:"d/m/Y" }}</span>
-                    {% if carro.fecha_actualizacion != carro.fecha_publicacion %}<span>Editado: {{ carro.fecha_actualizacion|date:"d/m/Y" }}</span>{% endif %}
+                    <span>{% trans "Published:" %} {{ carro.fecha_publicacion|date:"d/m/Y" }}</span>
+                    {% if carro.fecha_actualizacion != carro.fecha_publicacion %}<span>{% trans "Edited:" %} {{ carro.fecha_actualizacion|date:"d/m/Y" }}</span>{% endif %}
                 </div>
                 <div class="car-actions">
-                    <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary">Editar</a>
-                    <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex:1;" onsubmit="return confirm('¿Eliminar?');">
+                    <a href="{% url 'editar_carro' carro.id %}" class="btn btn-primary">{% trans "Edit" %}</a>
+                    <form method="POST" action="{% url 'eliminar_carro' carro.id %}" style="flex:1;" onsubmit="return confirm('{% trans "Delete?" %}');">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger" style="width:100%;">Eliminar</button>
+                        <button type="submit" class="btn btn-danger" style="width:100%;">{% trans "Delete" %}</button>
                     </form>
                 </div>
             </div>
@@ -58,18 +58,18 @@
         {% empty %}
         <div class="empty-state" style="grid-column:1/-1;">
             <div class="icon"></div>
-            <h3>Aún no has publicado carros</h3>
-            <p>Empieza ahora y llega a miles de compradores</p>
-            <a href="{% url 'agregar_carro' %}" class="btn btn-primary mt-2" style="display:inline-block; padding:0.8rem 1.5rem;">+ Publicar mi primer carro</a>
+            <h3>{% trans "You haven't published any cars yet" %}</h3>
+            <p>{% trans "Start now and reach thousands of buyers" %}</p>
+            <a href="{% url 'agregar_carro' %}" class="btn btn-primary mt-2" style="display:inline-block; padding:0.8rem 1.5rem;">+ {% trans "Publish my first car" %}</a>
         </div>
         {% endfor %}
     </div>
 
     {% if ultimas_ventas %}
-    <h2 class="section-title">Últimas ventas</h2>
+    <h2 class="section-title">{% trans "Latest sales" %}</h2>
     <div class="table-card">
         <table>
-            <thead><tr><th>Carro</th><th>Comprador</th><th>Método</th><th>Precio</th><th>Fecha</th></tr></thead>
+            <thead><tr><th>{% trans "Car" %}</th><th>{% trans "Buyer" %}</th><th>{% trans "Method" %}</th><th>{% trans "Price" %}</th><th>{% trans "Date" %}</th></tr></thead>
             <tbody>
             {% for v in ultimas_ventas %}
                 <tr>

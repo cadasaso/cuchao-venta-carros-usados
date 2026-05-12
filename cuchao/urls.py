@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('carros.urls')),  # redirige todas las URLs a la app carros
+    path('i18n/', include('django.conf.urls.i18n')),  # set_language view
+    path('', include('carros.urls')),
 ]
 
 # Servir archivos media en desarrollo

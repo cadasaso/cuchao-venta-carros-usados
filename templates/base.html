@@ -1,16 +1,15 @@
+{% load i18n static %}
 <!DOCTYPE html>
-<html lang="es" data-theme="{% if tema_oscuro_user %}dark{% else %}light{% endif %}">
+<html lang="{{ LANGUAGE_CODE }}" data-theme="{% if tema_oscuro_user %}dark{% else %}light{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cuchao - Marketplace de carros usados{% endblock %}</title>
-    {% load static %}
+    <title>{% block title %}Cuchao - {% trans "Used car marketplace" %}{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'carros/styles.css' %}">
     <script>
-        // Aplica tema antes del render para evitar flash
         (function() {
             const saved = localStorage.getItem('cuchao-theme');
             if (saved) document.documentElement.setAttribute('data-theme', saved);
@@ -22,45 +21,52 @@
         <div class="nav-container">
             <a href="{% url 'catalogo' %}" class="brand">Cuchao</a>
             <div class="nav-links">
-                <a href="{% url 'catalogo' %}">Explorar</a>
+                <a href="{% url 'catalogo' %}">{% trans "Explore" %}</a>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'mis_favoritos' %}">Favoritos{% if favoritos_count %} <span class="badge-count">{{ favoritos_count }}</span>{% endif %}</a>
-                    <a href="{% url 'bandeja_mensajes' %}">Mensajes{% if mensajes_no_leidos_count %} <span class="badge-count">{{ mensajes_no_leidos_count }}</span>{% endif %}</a>
-                    <a href="{% url 'mis_ofertas' %}">Ofertas{% if ofertas_pendientes_count %} <span class="badge-count">{{ ofertas_pendientes_count }}</span>{% endif %}</a>
+                    <a href="{% url 'mis_favoritos' %}">{% trans "Favorites" %}{% if favoritos_count %} <span class="badge-count">{{ favoritos_count }}</span>{% endif %}</a>
+                    <a href="{% url 'bandeja_mensajes' %}">{% trans "Messages" %}{% if mensajes_no_leidos_count %} <span class="badge-count">{{ mensajes_no_leidos_count }}</span>{% endif %}</a>
+                    <a href="{% url 'mis_ofertas' %}">{% trans "Offers" %}{% if ofertas_pendientes_count %} <span class="badge-count">{{ ofertas_pendientes_count }}</span>{% endif %}</a>
                     <a href="{% url 'dashboard' %}">Dashboard</a>
 
                     {# === DROPDOWN NOTIFICACIONES === #}
                     <div class="dropdown" id="notif-dropdown">
-                        <button class="nav-icon-btn" onclick="toggleNotifs(event)" title="Notificaciones">
+                        <button class="nav-icon-btn" onclick="toggleNotifs(event)" title="{% trans "Notifications" %}">
                             🔔
                             {% if notif_no_leidas %}<span class="badge-dot" id="notif-badge">{{ notif_no_leidas }}</span>{% endif %}
                         </button>
                         <div class="dropdown-panel">
                             <div class="dropdown-head">
-                                <h4>Notificaciones</h4>
-                                <button onclick="marcarTodas()">Marcar todas leídas</button>
+                                <h4>{% trans "Notifications" %}</h4>
+                                <button onclick="marcarTodas()">{% trans "Mark all read" %}</button>
                             </div>
                             <div class="dropdown-list" id="notif-list">
-                                <div class="notif-empty">Cargando...</div>
+                                <div class="notif-empty">{% trans "Loading..." %}</div>
                             </div>
-                            <a href="{% url 'notificaciones' %}" style="padding:0.7rem; text-align:center; border-top:1px solid var(--border); color:var(--primary); font-weight:700; font-size:0.85rem;">Ver todas</a>
+                            <a href="{% url 'notificaciones' %}" style="padding:0.7rem; text-align:center; border-top:1px solid var(--border); color:var(--primary); font-weight:700; font-size:0.85rem;">{% trans "See all" %}</a>
                         </div>
                     </div>
 
                     {# === TOGGLE TEMA OSCURO === #}
-                    <button class="nav-icon-btn" onclick="toggleTema()" title="Cambiar tema" id="theme-btn">🌙</button>
+                    <button class="nav-icon-btn" onclick="toggleTema()" title="{% trans "Toggle theme" %}" id="theme-btn">🌙</button>
 
-                    <a href="{% url 'agregar_carro' %}" class="btn-nav-primary">+ Vender</a>
+                    <a href="{% url 'agregar_carro' %}" class="btn-nav-primary">+ {% trans "Sell" %}</a>
                     <a href="{% url 'perfil_publico' user.username %}" class="user-chip">
                         {{ user.username }}{% if user.verificado %} (V){% endif %}
                     </a>
-                    <a href="{% url 'logout' %}">Salir</a>
+                    <a href="{% url 'logout' %}">{% trans "Sign out" %}</a>
                     {% if user.is_staff %}<a href="/admin/">Admin</a>{% endif %}
                 {% else %}
-                    <button class="nav-icon-btn" onclick="toggleTema()" title="Cambiar tema" id="theme-btn">🌙</button>
-                    <a href="{% url 'login' %}">Ingresar</a>
-                    <a href="{% url 'register' %}" class="btn-nav-primary">Crear cuenta</a>
+                    <button class="nav-icon-btn" onclick="toggleTema()" title="{% trans "Toggle theme" %}" id="theme-btn">🌙</button>
+                    <a href="{% url 'login' %}">{% trans "Sign in" %}</a>
+                    <a href="{% url 'register' %}" class="btn-nav-primary">{% trans "Create account" %}</a>
                 {% endif %}
+
+            </div>
+
+            {# === SELECTOR DE IDIOMA === #}
+            <div class="lang-switcher">
+                <a href="{% url 'cambiar_idioma' %}?lang=es&next={{ request.get_full_path }}" class="lang-btn {% if LANGUAGE_CODE == 'es' %}active{% endif %}">ES</a>
+                <a href="{% url 'cambiar_idioma' %}?lang=en&next={{ request.get_full_path }}" class="lang-btn {% if LANGUAGE_CODE == 'en' %}active{% endif %}">EN</a>
             </div>
         </div>
     </nav>
@@ -79,10 +85,10 @@
 
     {# === BARRA DE COMPARACIÓN FLOTANTE === #}
     <div class="compare-bar" id="compare-bar">
-        <span class="label">Comparar:</span>
+        <span class="label">{% trans "Compare:" %}</span>
         <div class="compare-thumbs" id="compare-thumbs"></div>
-        <button class="btn-compare-action" onclick="irComparar()">Comparar</button>
-        <button class="btn-compare-action" style="background:var(--surface-2); color:var(--text);" onclick="limpiarComparar()">Limpiar</button>
+        <button class="btn-compare-action" onclick="irComparar()">{% trans "Compare" %}</button>
+        <button class="btn-compare-action" style="background:var(--surface-2); color:var(--text);" onclick="limpiarComparar()">{% trans "Clear" %}</button>
     </div>
 
     {# === SCROLL TO TOP === #}
@@ -96,37 +102,37 @@
         <div class="footer-inner">
             <div>
                 <div class="footer-brand">Cuchao</div>
-                <p style="font-size:0.88rem; line-height:1.6;">El marketplace #1 de carros usados verificados. Compra y vende con confianza, directamente entre dueños.</p>
+                <p style="font-size:0.88rem; line-height:1.6;">{% trans "The #1 marketplace for verified used cars. Buy and sell with confidence, directly between owners." %}</p>
             </div>
             <div>
-                <h5>Explorar</h5>
-                <a href="{% url 'catalogo' %}">Catálogo</a>
+                <h5>{% trans "Explore" %}</h5>
+                <a href="{% url 'catalogo' %}">{% trans "Catalog" %}</a>
                 <a href="{% url 'catalogo' %}?categoria=suv">SUVs</a>
-                <a href="{% url 'catalogo' %}?categoria=sedan">Sedanes</a>
+                <a href="{% url 'catalogo' %}?categoria=sedan">{% trans "Sedans" %}</a>
                 <a href="{% url 'catalogo' %}?categoria=pickup">Pickups</a>
             </div>
             <div>
-                <h5>Mi cuenta</h5>
+                <h5>{% trans "My account" %}</h5>
                 {% if user.is_authenticated %}
                 <a href="{% url 'dashboard' %}">Dashboard</a>
-                <a href="{% url 'mis_compras' %}">Mis compras</a>
-                <a href="{% url 'mis_ofertas' %}">Mis ofertas</a>
-                <a href="{% url 'historial' %}">Historial</a>
+                <a href="{% url 'mis_compras' %}">{% trans "My purchases" %}</a>
+                <a href="{% url 'mis_ofertas' %}">{% trans "My offers" %}</a>
+                <a href="{% url 'historial' %}">{% trans "History" %}</a>
                 {% else %}
-                <a href="{% url 'login' %}">Ingresar</a>
-                <a href="{% url 'register' %}">Crear cuenta</a>
+                <a href="{% url 'login' %}">{% trans "Sign in" %}</a>
+                <a href="{% url 'register' %}">{% trans "Create account" %}</a>
                 {% endif %}
             </div>
             <div>
-                <h5>Soporte</h5>
-                <a href="#">Centro de ayuda</a>
-                <a href="#">Términos</a>
-                <a href="#">Privacidad</a>
-                <a href="#">Contacto</a>
+                <h5>{% trans "Support" %}</h5>
+                <a href="#">{% trans "Help center" %}</a>
+                <a href="#">{% trans "Terms" %}</a>
+                <a href="#">{% trans "Privacy" %}</a>
+                <a href="#">{% trans "Contact" %}</a>
             </div>
         </div>
         <div class="footer-bottom">
-            © 2026 Cuchao · Hecho con amor para los amantes de los carros
+            © 2026 Cuchao · {% trans "Made with love for car enthusiasts" %}
         </div>
     </footer>
 
@@ -169,7 +175,7 @@
         fetch("{% url 'api_notificaciones' %}").then(r => r.json()).then(data => {
             const list = document.getElementById('notif-list');
             if (!data.notificaciones.length) {
-                list.innerHTML = '<div class="notif-empty">No tienes notificaciones</div>';
+                list.innerHTML = '<div class="notif-empty">{% trans "No notifications" %}</div>';
                 return;
             }
             list.innerHTML = data.notificaciones.map(n => `
@@ -193,7 +199,6 @@
         fetch("{% url 'marcar_todas_leidas' %}", {method:'POST', headers:{'X-CSRFToken': getCsrf()}})
             .then(() => { cargarNotifs(); const b = document.getElementById('notif-badge'); if(b) b.remove(); });
     }
-    // Polling cada 60s
     setInterval(() => {
         fetch("{% url 'api_notificaciones' %}").then(r => r.json()).then(d => {
             const b = document.getElementById('notif-badge');
@@ -221,7 +226,7 @@
             arr.splice(ix, 1);
             if (btn) { btn.classList.remove('added'); btn.textContent = 'COMP'; }
         } else {
-            if (arr.length >= 4) { mostrarToast('Máximo 4 carros para comparar'); return; }
+            if (arr.length >= 4) { mostrarToast('{% trans "Maximum 4 cars to compare" %}'); return; }
             arr.push({id, titulo, img});
             if (btn) { btn.classList.add('added'); btn.textContent = 'OK'; }
         }
@@ -242,7 +247,7 @@
     }
     function irComparar() {
         const arr = getCompare();
-        if (arr.length < 2) { mostrarToast('Selecciona al menos 2 carros'); return; }
+        if (arr.length < 2) { mostrarToast('{% trans "Select at least 2 cars" %}'); return; }
         window.location = "{% url 'comparar_carros' %}?ids=" + arr.map(x => x.id).join(',');
     }
     function limpiarComparar() {
@@ -252,7 +257,6 @@
             b.classList.remove('added'); b.textContent = 'COMP';
         });
     }
-    // marcar botones de los que están en comparador
     (function() {
         const ids = getCompare().map(x => x.id);
         document.querySelectorAll('.btn-add-compare').forEach(b => {

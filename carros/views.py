@@ -768,3 +768,24 @@ Reglas:
 
     except Exception as e:
         return JsonResponse({'error': f'Error al generar contenido: {str(e)}'}, status=500)
+
+
+# ----------------- CAMBIO DE IDIOMA (GET, sin CSRF) -----------------
+def cambiar_idioma(request):
+    """Vista GET para cambiar el idioma. Evita problemas de CSRF/SameSite."""
+    from django.conf import settings as django_settings
+    lang = request.GET.get('lang', 'es')
+    next_url = request.GET.get('next', '/')
+    # Valida que el idioma sea uno de los permitidos
+    idiomas_validos = [code for code, _ in django_settings.LANGUAGES]
+    if lang not in idiomas_validos:
+        lang = django_settings.LANGUAGE_CODE
+    response = redirect(next_url)
+    response.set_cookie(
+        'django_language',
+        lang,
+        max_age=365 * 24 * 3600,   # 1 año
+        path='/',
+        samesite='Lax',
+    )
+    return response

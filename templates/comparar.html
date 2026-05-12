@@ -1,71 +1,71 @@
 {% extends 'base.html' %}
-{% load cuchao_filters %}
-{% block title %}Comparar carros - Cuchao{% endblock %}
+{% load i18n cuchao_filters %}
+{% block title %}{% trans "Compare cars" %} - Cuchao{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="section-title">Comparador de carros</h1>
-    <p class="section-subtitle">Encuentra las diferencias clave entre tus opciones favoritas</p>
+    <h1 class="section-title">{% trans "Car comparator" %}</h1>
+    <p class="section-subtitle">{% trans "Find the key differences between your favorite options" %}</p>
 
     {% if carros|length < 2 %}
     <div class="empty-state">
         <div class="icon"></div>
-        <h3>Selecciona al menos 2 carros para comparar</h3>
-        <p>Vuelve al catálogo y haz clic en el botón "Comp" en las tarjetas.</p>
-        <a href="{% url 'catalogo' %}" class="btn btn-primary mt-2" style="display:inline-block; padding:0.8rem 1.5rem;">Ir al catálogo</a>
+        <h3>{% trans "Select at least 2 cars to compare" %}</h3>
+        <p>{% trans "Go back to the catalog and click the \"Comp\" button on the cards." %}</p>
+        <a href="{% url 'catalogo' %}" class="btn btn-primary mt-2" style="display:inline-block; padding:0.8rem 1.5rem;">{% trans "Go to catalog" %}</a>
     </div>
     {% else %}
     <div class="compare-grid" style="grid-template-columns: 180px repeat({{ carros|length }}, 1fr);">
-        <div class="row-label">Imagen</div>
+        <div class="row-label">{% trans "Image" %}</div>
         {% for c in carros %}
         <div class="cell">
             <a href="{% url 'detalle_carro' c.id %}" class="head-img">
-                {% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-soft);">Sin imagen</div>{% endif %}
+                {% if c.imagen %}<img src="{{ c.imagen.url }}">{% else %}<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-soft);">{% trans "No image" %}</div>{% endif %}
             </a>
         </div>
         {% endfor %}
 
-        <div class="row-label">Modelo</div>
+        <div class="row-label">{% trans "Model" %}</div>
         {% for c in carros %}<div class="cell"><strong>{{ c.marca }} {{ c.modelo }}</strong></div>{% endfor %}
 
-        <div class="row-label">Precio</div>
+        <div class="row-label">{% trans "Price" %}</div>
         {% for c in carros %}<div class="cell" style="color:var(--primary); font-size:1.2rem; font-weight:900;">${{ c.precio|precio_fmt }}</div>{% endfor %}
 
-        <div class="row-label">Año</div>
+        <div class="row-label">{% trans "Year" %}</div>
         {% for c in carros %}<div class="cell">{{ c.anio|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Kilometraje</div>
+        <div class="row-label">{% trans "Mileage" %}</div>
         {% for c in carros %}<div class="cell">{% if c.kilometraje %}{{ c.kilometraje }} km{% else %}—{% endif %}</div>{% endfor %}
 
-        <div class="row-label">Transmisión</div>
+        <div class="row-label">{% trans "Transmission" %}</div>
         {% for c in carros %}<div class="cell">{{ c.get_transmision_display|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Combustible</div>
+        <div class="row-label">{% trans "Fuel" %}</div>
         {% for c in carros %}<div class="cell">{{ c.get_combustible_display|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Categoría</div>
+        <div class="row-label">{% trans "Category" %}</div>
         {% for c in carros %}<div class="cell">{{ c.get_categoria_display|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Color</div>
+        <div class="row-label">{% trans "Color" %}</div>
         {% for c in carros %}<div class="cell">{{ c.color|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Estado</div>
+        <div class="row-label">{% trans "Condition" %}</div>
         {% for c in carros %}<div class="cell">{{ c.get_estado_display|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Ubicación</div>
+        <div class="row-label">{% trans "Location" %}</div>
         {% for c in carros %}<div class="cell">{{ c.ciudad|default:"—" }}</div>{% endfor %}
 
-        <div class="row-label">Vendedor</div>
+        <div class="row-label">{% trans "Seller" %}</div>
         {% for c in carros %}<div class="cell">
-            <a href="{% url 'perfil_publico' c.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ c.propietario.username }}</a>{% if c.propietario.verificado %} <span class="badge-verified">Verificado</span>{% endif %}<br>
-            <small style="color:var(--text-soft);">{{ c.propietario.calificacion_promedio }}/5 · {{ c.propietario.total_ventas }} ventas</small>
+            <a href="{% url 'perfil_publico' c.propietario.username %}" style="color:var(--primary); font-weight:600;">{{ c.propietario.username }}</a>{% if c.propietario.verificado %} <span class="badge-verified">{% trans "Verified" %}</span>{% endif %}<br>
+            <small style="color:var(--text-soft);">{{ c.propietario.calificacion_promedio }}/5 · {{ c.propietario.total_ventas }} {% trans "sales" %}</small>
         </div>{% endfor %}
 
-        <div class="row-label">Vistas</div>
-        {% for c in carros %}<div class="cell">{{ c.vistas }} vistas</div>{% endfor %}
+        <div class="row-label">{% trans "Views" %}</div>
+        {% for c in carros %}<div class="cell">{{ c.vistas }} {% trans "views" %}</div>{% endfor %}
 
-        <div class="row-label">Acción</div>
+        <div class="row-label">{% trans "Action" %}</div>
         {% for c in carros %}<div class="cell">
-            <a href="{% url 'detalle_carro' c.id %}" class="btn btn-primary" style="display:block;">Ver detalle</a>
+            <a href="{% url 'detalle_carro' c.id %}" class="btn btn-primary" style="display:block;">{% trans "View details" %}</a>
         </div>{% endfor %}
     </div>
     {% endif %}

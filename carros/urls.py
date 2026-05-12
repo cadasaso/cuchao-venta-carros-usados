@@ -61,6 +61,9 @@ urlpatterns = [
     # Historial
     path('historial/', views.historial, name='historial'),
 
+    # Cambio de idioma (GET, sin CSRF)
+    path('idioma/', views.cambiar_idioma, name='cambiar_idioma'),
+
     # IA: generador de descripción
     path('api/generar-descripcion/', views.generar_descripcion_ia, name='generar_descripcion_ia'),
 ]

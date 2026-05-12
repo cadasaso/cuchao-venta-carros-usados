@@ -1162,3 +1162,20 @@ a.car-img:hover::before { opacity: 1; transform: translateX(-50%) translateY(0);
 .fav-btn { font-size: 1.2rem; }
 .fav-btn:hover { transform: scale(1.18); }
 .fav-btn.active { background: #fee2e2; color: #ef4444; }
+
+/* ============== LANGUAGE SWITCHER ============== */
+.lang-switcher { display: flex; align-items: center; gap: 0.15rem; flex-shrink: 0; }
+.lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all .15s;
+}
+.lang-btn:hover { border-color: var(--primary); color: var(--primary); }
+.lang-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
