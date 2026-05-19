@@ -146,7 +146,7 @@
                         {% if carro.vendido %}<span class="badge-vendido">{% trans "Sold" %}</span>
                         {% else %}<span class="badge-disponible">{% trans "Available" %}</span>{% endif %}
                     </a>
-                    <button class="btn-add-compare" data-car-id="{{ carro.id }}" onclick="toggleCompareCar({{ carro.id }}, '{{ carro.marca }} {{ carro.modelo|escapejs }}', '{% if carro.imagen %}{{ carro.imagen.url }}{% endif %}', this)" title="{% trans "Compare" %}">Comp</button>
+                    <button class="btn-add-compare" data-car-id="{{ carro.id }}" onclick="toggleCompareCar({{ carro.id }}, '{{ carro.marca }} {{ carro.modelo|escapejs }}', '{% if carro.imagen %}{{ carro.imagen.url }}{% endif %}', this)" title="{% trans "Compare" %}">⇄</button>
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'toggle_favorito' carro.id %}" style="position:absolute; top:0.8rem; right:0.8rem;">
                         {% csrf_token %}

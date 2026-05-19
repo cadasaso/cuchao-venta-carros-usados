@@ -907,14 +907,18 @@ html[data-theme="dark"] .chat-msg--other .chat-bubble {
     font-weight: 800; cursor: pointer; font-size: 0.82rem;
 }
 .btn-add-compare {
-    position: absolute; top: 0.8rem; left: 0.8rem;
-    width: 32px; height: 32px; border-radius: 8px;
-    background: rgba(255,255,255,.95); border: 0; cursor: pointer;
-    font-size: 0.95rem; box-shadow: var(--shadow-sm);
+    position: absolute; top: 3rem; left: 0.8rem;
+    width: 28px; height: 28px; border-radius: 6px;
+    background: rgba(255,255,255,.9); border: 0; cursor: pointer;
+    font-size: 1rem; line-height: 28px; text-align: center;
+    color: #1e293b;
     z-index: 5; transition: all .2s;
+    opacity: 0; transform: scale(0.8);
+    backdrop-filter: blur(4px);
 }
-.btn-add-compare:hover { background: var(--gradient); color: white; }
-.btn-add-compare.added { background: var(--success); color: white; }
+.car-card:hover .btn-add-compare { opacity: 1; transform: scale(1); }
+.btn-add-compare:hover { background: var(--gradient); color: white; transform: scale(1.12); }
+.btn-add-compare.added { background: var(--success); color: white; opacity: 1; transform: scale(1); }
 
 /* ============== COMPARE TABLE ============== */
 .compare-grid {

@@ -224,11 +224,11 @@
         const ix = arr.findIndex(x => x.id === id);
         if (ix >= 0) {
             arr.splice(ix, 1);
-            if (btn) { btn.classList.remove('added'); btn.textContent = 'COMP'; }
+            if (btn) { btn.classList.remove('added'); btn.textContent = '⇄'; }
         } else {
             if (arr.length >= 4) { mostrarToast('{% trans "Maximum 4 cars to compare" %}'); return; }
             arr.push({id, titulo, img});
-            if (btn) { btn.classList.add('added'); btn.textContent = 'OK'; }
+            if (btn) { btn.classList.add('added'); btn.textContent = '✓'; }
         }
         saveCompare(arr);
     }
@@ -254,14 +254,14 @@
         localStorage.removeItem(COMPARE_KEY);
         renderCompare();
         document.querySelectorAll('.btn-add-compare.added').forEach(b => {
-            b.classList.remove('added'); b.textContent = 'COMP';
+            b.classList.remove('added'); b.textContent = '⇄';
         });
     }
     (function() {
         const ids = getCompare().map(x => x.id);
         document.querySelectorAll('.btn-add-compare').forEach(b => {
             const id = parseInt(b.dataset.carId);
-            if (ids.includes(id)) { b.classList.add('added'); b.textContent = 'OK'; }
+            if (ids.includes(id)) { b.classList.add('added'); b.textContent = '✓'; }
         });
         renderCompare();
     })();
